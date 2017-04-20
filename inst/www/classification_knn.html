@@ -17,17 +17,14 @@
 				var textType = /doc.*/;
 				if (file.type.match(textType)) {
 					//disable the button to prevent multiple clicks
-					$("#submitbutton").attr("disabled", "disabled");
+					$("#fileInput").attr("disabled", "disabled");
 					
 					var req = ocpu.rpc("readDoc", {
 					  file : file,
 					}, function(session){
 						var result = String(session.values);
-						alert(result);
 						var array = result.split(',');
-						alert(array[1]);
 						$("#lb").val(array[0]);
-						$("#lb").val("asdasd");
 						$("#ac").val(array[1]);
 						$("#fm").val(array[2]);
 						$("#uc").val(array[3]);
