@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Classification - k Nearest Neighbour</title>
+
+	<link rel="stylesheet" type="text/css" href="classification_knn.css">
+
+	<!-- Include order: first jquery, then opencpu.js, and then your code -->
+    <script src="opencpu/jquery-3.1.1.min.js"></script>
+    <script src="opencpu/opencpu-0.4.js"></script>
+
+	<script>
+		//init this script when the page has loaded
+		$(document).ready(function(){
+			 $("#fileInput").on("change", function(){
+				var file = fileInput.files[0];
+				var textType = /doc.*/;
+				if (file.type.match(textType)) {
+					//disable the button to prevent multiple clicks
+					$("#submitbutton").attr("disabled", "disabled");
+					
+					var req = ocpu.rpc("readDoc", {
+					  file : file,
+					}, function(session){
+					  alert(session.values);
+					});
+					//if R returns an error, alert the error message
+					req.fail(function(){
+					  alert("Server error: " + req.responseText);
+					});
+
+					//after request complete, re-enable the button
+					req.always(function(){
+					  $("#fileInput").removeAttr("disabled")
+					});
+				} else {
+					alert("File not supported!");
+				}
+			});
+		
+		  $("#submitbutton").on("click", function(){
+			var $myForm = $('#myForm');
+			if (!$myForm[0].checkValidity())
+				$myForm.find(':submit').click();
+
+			if($("#lb").val() == "" || $("#ac").val() == "" || $("#fm").val() == "" || $("#uc").val() == "" || $("#dl").val() == "" || $("#astv").val() == "" || 
+				$("#mstv").val() == "" || $("#altv").val() == "" || $("#mltv").val() == "" || $("#width").val() == "" || $("#min").val() == "" || 
+				$("#max").val() == "" || $("#nmax").val() == "" || $("#nzeros").val() == "" || $("#mode").val()== "" || $("#median").val() == "" || 
+				$("#variance").val() == "" || $("#tendency").val() == "" || $("#mean").val() == "")
+				{
+				alert("One of the input values is missing!");
+				return false;
+				}
+
+			//disable the button to prevent multiple clicks
+			$("#submitbutton").attr("disabled", "disabled");
+
+			var lb = parseFloat($("#lb").val());
+			var ac = parseFloat($("#ac").val());
+			var fm = parseFloat($("#fm").val());
+			var uc = parseFloat($("#uc").val());
+			var dl = parseFloat($("#dl").val());
+			var astv = parseFloat($("#astv").val());
+			var mstv = parseFloat($("#mstv").val());
+			var altv = parseFloat($("#altv").val());
+			var mltv = parseFloat($("#mltv").val());
+			var width = parseFloat($("#width").val());
+			var min = parseFloat($("#min").val());
+			var max = parseFloat($("#max").val());
+			var nmax = parseFloat($("#nmax").val());
+			var nzeros = parseFloat($("#nzeros").val());
+			var mode = parseFloat($("#mode").val());
+			var mean = parseFloat($("#mean").val());
+			var median = parseFloat($("#median").val());
+			var variance = parseFloat($("#variance").val());
+			var tendency = parseFloat($("#tendency").val());
+			
+			var patient = [{ LB : lb,
+				AC : ac,
+				FM : fm,
+				UC : uc,
+				DL : dl,
+				ASTV : astv,
+				MSTV : mstv,
+				ALTV : altv,
+				MLTV : mltv,
+				Width : width,
+				Min : min,
+				Max : max,
+				Nmax : nmax,
+				Nzeros : nzeros,
+				Mode : mode,
+				Mean : mean,
+				Median : median,
+				Variance : variance,
+				Tendency : tendency
+				}];
+
+			//perform the request
+			var req = ocpu.rpc("getDiagnostic", {
+				input : patient
+			}, function(output){
+			  $("#output").text(output.diagnostic);
+			});
+
+			//if R returns an error, alert the error message
+			req.fail(function(){
+			  alert("Server error: " + req.responseText);
+			});
+
+			//after request complete, re-enable the button
+			req.always(function(){
+			  $("#submitbutton").removeAttr("disabled")
+			});
+      });
+    });
+	</script>
+
+  </head>
+  <body>
+  <form id="myForm">
+	<fieldset>
+		<legend>Results of medical tests</legend>
+		<div class="divHalf">
+			<input name="lb" class="select" id="lb" type="number" placeholder="FRH baseline (beats per minute)" title="FRH baseline (beats per minute)" min="0" max="200"></input>
+			<br>
+			<input name="ac" class="select" id="ac" type="number" step=any placeholder="Accelerations per second" title="Accelerations per second" min="0" max="1"></input>
+			<br>
+			<input name="fm" class="select" id="fm" type="number" step=any placeholder="Fetal movements per second" title="Fetal movements per second" min="0" max="1"></input>
+			<br>
+			<input name="uc" class="select" id="uc"  type="number" step=any placeholder="Uterine contractions per second" title="Uterine contractions per second" min="0" max="1"></input>
+			<br>
+			<input name="dl" class="select" id="dl" type="number" step=any placeholder="Light decelerations per second" title="Light decelerations per second" min="0" max="1"></input>
+			<br>
+			<input name="astv" class="select" id="astv" type="number" placeholder="Percentage of time with abnormal short term variability" title="Percentage of time with abnormal short term variability" min="0" max="200"></input>
+			<br>
+			<input name="mstv" class="select" id="mstv" type="number" step=any placeholder="Mean value of short term variability" title="Mean value of short term variability" min="0" max="200"></input>
+			<br>
+			<input name="altv" class="select" id="altv" type="number" placeholder="Percentage of time with abnormal long term variability" title="Percentage of time with abnormal long term variability" min="0" max="200"></input>
+			<br>
+			<input name="mltv" class="select" id="mltv" type="number" step=any placeholder="Mean value of long term variability" title="Mean value of long term variability" min="0" max="200"></input>
+			<br>
+		</div>
+		<div class="divHalf">
+			<input name="width" class="select" id="width" type="number" placeholder="Width of FRH histogram" title="Width of FRH histogram" min="0" max="300"></input>
+			<br>
+			<input name="min" class="select" id="min" type="number" placeholder="Minimum of FRH histogram" title="Minimum of FRH histogram" min="0" max="300"></input>
+			<br>
+			<input name="max" class="select" id="max" type="number" placeholder="Maximum of FRH histogram" title="Maximum of FRH histogram" min="0" max="300"></input>
+			<br>
+			<input name="nmax" class="select" id="nmax" type="number" placeholder="Number of histogram peaks" title="Number of histogram peaks" min="0" max="300"></input>
+			<br>
+			<input name="nzeros" class="select" id="nzeros" type="number" placeholder="Number of histogram zeros" title="Number of histogram zeros" min="0" max="300"></input>
+			<br>
+			<input name="mode" class="select" id="mode" type="number" placeholder="Histogram mode" title="Histogram mode" min="0" max="300"></input>
+			<br>
+			<input name="mean" class="select" id="mean" type="number" placeholder="Histogram mean" title"Histogram mean" min="0" max="300"></input>
+			<br>
+			<input name="median" class="select" id="median" type="number" placeholder="Histogram median" title="Histogram median" min="0" max="300"></input>
+			<br>
+			<input name="variance" class="select" id="variance" type="number" placeholder="Histogram variance" title="Histogram variance" min="0" max="300"></input>
+			<br>
+			<input name="tendency" class="select" id="tendency" type="number" placeholder="Histogram tendency" title="Histogram tendency" min="-1" max="1"></input>
+		</div>
+
+		<legend></legend>
+		<div>
+			Read data from text file:
+			<input type="file" id="fileInput">
+		</div>
+	</fieldset>
+	<br>
+	<input id="submitbutton" type="submit" value="Get diagnostic result"></input>
+	<p style="display:inline" id="output"></p>
+  </form>
+  </body>
+</html>

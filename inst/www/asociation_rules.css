@@ -1,0 +1,40 @@
+body, html { 
+	height:100%; 
+	width:100%;
+	padding:0; 
+	margin:0;
+}
+
+a:link {
+	text-decoration: none;
+}
+
+p {
+	width: 160px;
+	white-space: nowrap ;
+}
+
+#submitbutton {
+	width: 160px;
+}
+
+select, input[type="text"] {
+    width: 160px;
+    box-sizing: border-box;
+}
+
+section {
+    padding: 8px;
+    background-color: #f0f0f0;
+    overflow: auto;
+}
+
+section > div {
+    float: left;
+    padding: 4px;
+}
+
+section > div + div {
+    width: 40px;
+    text-align: center;
+}

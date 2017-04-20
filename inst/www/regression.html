@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Regression - Linear Model</title>
+	
+	<link rel="stylesheet" type="text/css" href="regression.css">
+	
+	<!-- Include order: first jquery, then opencpu.js, and then your code -->
+    <script src="opencpu/jquery-3.1.1.min.js"></script>
+    <script src="opencpu/opencpu-0.4.js"></script>
+	
+	<script>
+	
+	// init Car info form
+	$(function () { 
+		var models = {
+			"Dacia":["Logan","Sandero","Duster"],
+			"Volkswagen":["Golf","Jetta",],
+			"Audi":["A3","A4"]
+		};
+		
+		$('#brand').append('<option disabled selected value>Brand</option>');
+		$.each(models, function(key, value){            
+			$('#brand').append($('<option />').text(key));
+		});
+		
+		$('#brand').change(function(){
+			var key = $(this).val();
+			$('#model').empty();
+			$('#model').append('<option disabled selected value>Model</option>');
+			for(var i in models[key]) {
+				$('#model').append('<option>' + models[key][i] + '</option>');
+			}
+		}).trigger('change');
+		
+		$('#year').append('<option disabled selected value>Manufacturing year</option>');
+		for(var i = 2016; i > 1980; i--) {
+			$('#year').append($('<option />').text(i));
+		}
+	});
+	
+    //init this script when the page has loaded
+    $(document).ready(function(){
+      $("#submitbutton").on("click", function(){
+		var $myForm = $('#carForm');
+		if (!$myForm[0].checkValidity()) 
+			$myForm.find(':submit').click();
+	  
+		if($("#brand").val() == "" || $("#model").val() == "" || $("#year").val() == "" || $("#engine").val() == "" || 
+			$("#km").val() == "" || $("#hp").val() == "" || $("#fuel").val() == "")
+		{
+			alert("One of the input values is missing!");				
+			return false;	
+		}
+	  
+        //disable the button to prevent multiple clicks
+        $("#submitbutton").attr("disabled", "disabled");
+	
+		var brand = $("#brand").val();
+		var model = $("#model").val();
+		var year = parseInt($("#year").val());
+		var engine = parseInt($("#engine").val());
+		var km = parseInt($("#km").val());
+		var diesel = 0;
+		if($("#fuel").val() == "Diesel")
+			diesel = 1;
+		var hp = parseInt($("#hp").val());
+		var euroStr = $("#euro").val();
+		var euro = 3;
+		if(euroStr == "Euro 6")
+			euro = 6;
+		else if(euroStr == "Euro 5")
+			euro = 5;
+		else if(euroStr == "Euro 4")
+			euro = 4;
+	
+		var car = [{ Brand : brand,
+			Model : model,
+			Year : year,
+			Price : 0,
+			Engine: engine,
+			Kilometers: km,
+			Diesel : diesel,
+			Horsepower: hp,
+			Euro: euro}
+		];
+	
+		//perform the request
+        var req = ocpu.rpc("getCarPrice", {
+			input : car
+        }, function(output){
+          $("#output").text(parseInt(output.carPrice) + " euro");
+        });
+	
+		//if R returns an error, alert the error message
+        req.fail(function(){
+          alert("Server error: " + req.responseText);
+        });
+        
+        //after request complete, re-enable the button 
+        req.always(function(){
+          $("#submitbutton").removeAttr("disabled")
+        });
+      });
+    });
+    </script>
+  </head>
+  <body>
+  <form class="carForm" id = "carForm">
+	<fieldset>
+		<legend>Car Info</legend>
+		<select name="brand" id="brand" placeholder="asdasd"></select>
+		<br><br>
+		<select name="model" id="model"></select>
+		<br><br>
+		<select name="year" id="year"></select>
+		<br><br>
+		<select name="fuel" id="fuel">
+			<option disabled selected value>Fuel type</option>
+			<option>Petrol</option>
+			<option>Diesel</option>
+		</select>
+		<br><br>
+		<input name="engine" class="select" id="engine" type="number" placeholder="Engine capacity" min="800" max="8400"></input>
+		<br><br>
+		<input name="km" class="select" id="km" type="number" placeholder="Number of km" min="0" max="2000000"></input>
+		<br><br>
+		<input name="hp" class="select" id="hp" type="number" placeholder="Horsepower" min="0" max="1200"></input>
+		<br><br>
+		<select name="euro" id="euro">
+			<option disabled selected value>Pollution norms</option>
+			<option>Euro 6</option>
+			<option>Euro 5</option>
+			<option>Euro 4</option>
+			<option>Euro 3 or older</option>
+		</select>
+		<br><hr>
+		<input id="submitbutton" type="submit" value="Get recommended price"></input>
+		<p style="display:inline" id="output"></p>
+	</fieldset>
+  </form>
+  </body>
+</html>

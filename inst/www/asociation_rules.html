@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Regression - Linear Model</title>
+	
+	<link rel="stylesheet" type="text/css" href="asociation_rules.css">
+	
+	<!-- Include order: first jquery, then opencpu.js, and then your code -->
+    <script src="opencpu/jquery-3.1.1.min.js"></script>
+    <script src="opencpu/opencpu-0.4.js"></script>
+	
+	<script>
+	//init this script when the page has loaded
+	$(document).ready(function(){
+		$("#submitbutton").on("click", function(){
+			//disable the button to prevent multiple clicks
+			$("#submitbutton").attr("disabled", "disabled");
+		
+			var input = "";
+			$("#rightValues option").each(function(){
+				input += $(this).val() + ","
+			});
+			input = input.substring(0, input.length - 1);
+			
+			//perform the request
+			var req = ocpu.rpc("getRecommendations", {
+				input : input
+			}, function(output){
+			  alert(output.recommendations);
+			});
+
+			//if R returns an error, alert the error message
+			req.fail(function(){
+			  alert("Server error: " + req.responseText);
+			});
+
+			//after request complete, re-enable the button
+			req.always(function(){
+			  $("#submitbutton").removeAttr("disabled")
+			});
+		});
+    });
+    </script>
+  </head>
+  <body>
+	<section class="container">
+		<div>
+			<p style="display:inline">Available items:</p>
+			</br>
+			<select id="leftValues" size="10">
+				<option>whole milk</option>
+				<option>other vegetables</option>
+				<option>rolls/buns</option>
+				<option>soda</option>
+				<option>yogurt</option>
+				<option>bottled water</option>
+				<option>root vegetables</option>
+				<option>tropical fruit</option>
+				<option>shopping bags</option>
+				<option>sausage</option>
+				<option>pastry</option>
+				<option>citrus fruit</option>
+				<option>bottled beer</option>
+				<option>newspapers</option>
+				<option>canned beer</option>
+				<option>pip fruit</option>
+				<option>fruit/vegetable juice</option>
+				<option>whipped/sour cream</option>
+				<option>brown bread</option>
+				<option>domestic eggs</option>
+				<option>margarine</option>
+				<option>coffee</option>
+				<option>pork</option>
+				<option>butter</option>
+				<option>curd</option>
+				<option>beef</option>
+				<option>napkins</option>
+				<option>chocolate</option>
+				<option>frozen vegetables</option>
+				<option>chicken</option>
+				<option>white bread</option>
+				<option>cream cheese</option>
+				<option>waffles</option>
+				<option>salty snack</option>
+				<option>dessert</option>
+				<option>sugar</option>
+				<option>UHT-milk</option>
+				<option>berries</option>
+			</select>
+		</div>
+		<div>
+			<input type="button" id="btnLeft" value="&lt;&lt;" />
+			<input type="button" id="btnRight" value="&gt;&gt;" />
+		</div>
+		<div>
+			<p style="display:inline" >Selected items:</p>
+			</br>
+			<select id="rightValues" size="3" multiple max=3>
+			</select>
+			<input id="submitbutton" type="submit" value="Get recommendations" disabled=true></input>
+			</br></br>
+			<p style="display:inline">Recommended items:</p>
+			<select id="results" size="3" multiple max=3>
+			</select>
+		</div>
+	</section>
+	
+	<script>
+		$("#btnLeft").click(function () {
+			var selectedItem = $("#rightValues option:selected");
+			$("#leftValues").append(selectedItem);
+			
+			if(parseInt(document.getElementById("rightValues").length) < 1)
+				$('#submitbutton').prop('disabled', true);
+			else
+				$('#submitbutton').prop('disabled', false);
+		});
+
+		$("#btnRight").click(function () {
+			if(parseInt(document.getElementById("rightValues").length) < 3){
+				var selectedItem = $("#leftValues option:selected");
+				$("#rightValues").append(selectedItem);
+				}
+			else
+				alert("Maximum three elemens!");
+				
+			if(parseInt(document.getElementById("rightValues").length) < 1)
+				$('#submitbutton').prop('disabled', true);
+			else
+				$('#submitbutton').prop('disabled', false);
+		});
+
+		$("#rightValues").change(function () {
+			var selectedItem = $("#rightValues option:selected");
+			$("#txtRight").val(selectedItem.text());
+		});
+	</script>
+  </body>
+</html>

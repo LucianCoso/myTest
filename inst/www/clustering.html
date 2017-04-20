@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Clustering - kmeans</title>
+	
+	<link rel="stylesheet" type="text/css" href="clustering.css">
+	
+	<!-- Include order: first jquery, then opencpu.js, and then your code -->
+    <script src="opencpu/jquery-3.1.1.min.js"></script>
+    <script src="opencpu/opencpu-0.4.js"></script>
+	
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaD40SdnzmSa_HQz1E4pk_Tlb36IAk6Xg&callback=initMap"
+        async="" defer="defer" type="text/javascript"></script>
+
+	<script>
+		function openTab(evt, tabName) {
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(" active", "");
+			}
+			document.getElementById(tabName).style.display = "block";
+			evt.currentTarget.className += " active";
+			
+			if(tabName == "map")
+				initMap();
+			else
+				initPlot();
+		}
+		
+		function getClusterColor(index){
+			switch(index){
+				case 0: return "#0099ff";
+				case 1: return "#cc3333";
+				case 2: return "#80ff80";
+				case 3: return "#ffff66";
+				case 4: return "#9966ff";
+				case 5: return "#ff9933";
+				case 6: return "#ff66b3";
+				case 7: return "#ffffff";
+				case 8: return "#808080";
+				case 9: return "#000099";
+				default: return "#000000";
+			}
+		}
+		
+		function initMap()	{
+			//perform the request
+			var req = ocpu.rpc("getClusters", {
+				nrClusters : parseInt($('#nrClusters').val())
+			}, function(output){
+				var outputString =  String(output.clusters);
+				var list = outputString.split(',');
+				
+				var clusters = [];
+				for(i=0; i < list.length; i++){
+					clusters.push(parseInt(list[i]));
+				}
+				loadMap(clusters);
+			});
+			//if R returns an error, alert the error message
+			req.fail(function(){
+				var clusters = [2,3,2,3,2,2,2,1,3,1,3,3,3,1,1,3,3,3,2,2,1,2,3,3,2,1,2,2,1,1,1,3,3,2,2,3];
+				loadMap(clusters);
+				alert("Server error: " + req.responseText);
+			});
+		}
+		
+		function loadMap(clusters) {
+			var mapDiv = document.getElementById('map');
+			var map = new google.maps.Map(mapDiv, {
+			  center: {lat: 55.00, lng: 15.00},
+			  zoom: 4,
+			  scrollwheel: false,
+			  draggable: false,
+			  disableDefaultUI: true,
+			   styles: [
+				{elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+				{elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+				{elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+				{
+				  featureType: 'administrative.locality',
+				  elementType: 'labels.text.fill',
+				  stylers: [{color: '#d59563'}]
+				},
+				{
+				  featureType: 'poi',
+				  elementType: 'labels.text.fill',
+				  stylers: [{color: '#d59563'}]
+				},
+				{
+				  featureType: 'poi.park',
+				  elementType: 'geometry',
+				  stylers: [{color: '#263c3f'}]
+				},
+				{
+				  featureType: 'poi.park',
+				  elementType: 'labels.text.fill',
+				  stylers: [{color: '#6b9a76'}]
+				},
+				{
+				  featureType: 'road',
+				  elementType: 'geometry',
+				  stylers: [{color: '#38414e'}]
+				},
+				{
+				  featureType: 'road',
+				  elementType: 'geometry.stroke',
+				  stylers: [{color: '#212a37'}]
+				},
+				{
+				  featureType: 'road',
+				  elementType: 'labels.text.fill',
+				  stylers: [{color: '#9ca5b3'}]
+				},
+				{
+				  featureType: 'road.highway',
+				  elementType: 'geometry',
+				  stylers: [{color: '#746855'}]
+				},
+				{
+				  featureType: 'road.highway',
+				  elementType: 'geometry.stroke',
+				  stylers: [{color: '#1f2835'}]
+				},
+				{
+				  featureType: 'road.highway',
+				  elementType: 'labels.text.fill',
+				  stylers: [{color: '#f3d19c'}]
+				},
+				{
+				  featureType: 'transit',
+				  elementType: 'geometry',
+				  stylers: [{color: '#2f3948'}]
+				},
+				{
+				  featureType: 'transit.station',
+				  elementType: 'labels.text.fill',
+				  stylers: [{color: '#d59563'}]
+				},
+				{
+				  featureType: 'water',
+				  elementType: 'geometry',
+				  stylers: [{color: '#17263c'}]
+				},
+				{
+				  featureType: 'water',
+				  elementType: 'labels.text.fill',
+				  stylers: [{color: '#515c6d'}]
+				},
+				{
+				  featureType: 'water',
+				  elementType: 'labels.text.stroke',
+				  stylers: [{color: '#17263c'}]
+				}
+				]
+			});
+			
+			var isoDigits = ['AL','AT','BY','BE','BA','BG','HR','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','LV','LT',
+				'MT','MD','NL','NO','PL','PT','RO','RU','SK','SI','ES','SE','CH','TR','UA','GB'];
+			
+			var countryClusters = [];
+			for(i=0; i < 10; i++){
+				var countries = "'AA',";
+				for(j=0; j < clusters.length; j++){
+					if(clusters[j] == (i+1)){
+						countries += "'" + isoDigits[j] +"',"; 
+					}
+				}
+				countries = countries.substring(0, countries.length - 1);
+				countryClusters.push(countries);
+			}
+			
+			var layer = new google.maps.FusionTablesLayer({
+			  query: {
+				select: 'geometry',
+				from: '1N2LBk4JHwWpOY4d9fobIn27lfnZ5MDy-NoqqRpk',
+			  },
+			  suppressInfoWindows: true,
+			  styles: [
+				{
+				polygonOptions: {
+					fillColor: "#000000",
+					strokeColor: "#FFFFFF",
+					fillOpacity: 0.8
+					}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[0] + ")",
+					polygonOptions: {fillColor: getClusterColor(0)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[1] + ")",
+					polygonOptions: {fillColor: getClusterColor(1)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[2] + ")",
+					polygonOptions: {fillColor: getClusterColor(2)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[3] + ")",
+					polygonOptions: {fillColor: getClusterColor(3)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[4] + ")",
+					polygonOptions: {fillColor: getClusterColor(4)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[5] + ")",
+					polygonOptions: {fillColor: getClusterColor(5)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[6] + ")",
+					polygonOptions: {fillColor: getClusterColor(6)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[7] + ")",
+					polygonOptions: {fillColor: getClusterColor(7)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[8] + ")",
+					polygonOptions: {fillColor: getClusterColor(8)}
+				  }, {
+					where: "ISO_2DIGIT IN (" + countryClusters[9] + ")",
+					polygonOptions: {fillColor: getClusterColor(9)}
+				  }]
+				});
+			layer.setMap(map);
+		  }
+		
+		function initPlot(){
+			//disable the button to prevent multiple clicks
+			$("#getPlot").attr("disabled", "disabled");
+			$('#plotdiv').css('visibility', 'visible');
+		
+			//perform the request
+			var req = $("#plotdiv").rplot("getPlot", {
+				nrClusters : parseInt($('#nrClusters').val()),
+				xaxis: $('#xaxis').val(),
+				yaxis: $('#yaxis').val()
+				})
+				
+			//if R returns an error, alert the error message
+			req.fail(function(){
+				$('#plotdiv').css('visibility', 'hidden');
+				alert("Server error: " + req.responseText);
+			});
+
+			//after request complete, re-enable the button
+			req.always(function(){
+				$("#getPlot").removeAttr("disabled");
+			});
+		}
+		
+		$(document).ready(function() {
+			//Open the default tab
+			$("#defaultOpen").trigger('click');
+		});
+		
+		$(document).ready(function(){
+			$("#changeNrClusters").on("click", function(){
+				//disable the button to prevent multiple clicks
+				$("#changeNrClusters").attr("disabled", "disabled");
+			
+				//update the map
+				initMap();
+				
+				//update the plot
+				initPlot();
+
+				$("#changeNrClusters").removeAttr("disabled");
+			});
+		});
+		
+		$(document).ready(function(){
+			$("#getPlot").on("click", function(){
+				//update the plot
+				initPlot();
+			});
+		});
+    </script>
+
+  </head>
+  <body>
+	<form>
+		Number of clusterts
+		<input name="nrClusters" id="nrClusters" type="number" value="3" min="0" max="100" /></input>
+		<button id="changeNrClusters" type="button" value="Change">Change</button>
+	</form>
+	<br>
+	
+	<div class="tab">
+		<button class="tablinks" onclick="openTab(event, 'map')" id="defaultOpen">Map</button>
+		<button class="tablinks" onclick="openTab(event, 'plot')">Plot</button>
+	</div>
+	
+	<div id="map" class="tabcontent">
+	</div>
+	
+	<div id="plot" class="tabcontent">
+		<form>
+			X axis
+			<select name="xaxis" id = "xaxis">
+				<option value="Per_capita_income" selected>Per capita income</option>
+				<option value="Literacy">Literacy</option>
+				<option value="Infant_mortality">Infant mortality</option>
+				<option value="Life_expectancy">Life expectancy</option>
+				<option value="Murder_rate">Murder rate</option>
+			</select>
+			<br><br>
+			Y axis
+			<select name="yaxis" id="yaxis">
+				<option value="Per_capita_income">Per capita income</option>
+				<option value="Literacy">Literacy</option>
+				<option value="Infant_mortality">Infant mortality</option>
+				<option value="Life_expectancy" selected>Life expectancy</option>
+				<option value="Murder_rate">Murder rate</option>
+			</select>
+			<br><br>
+			<button id="getPlot" type="button" value="Get plot">Get plot</button>
+		</form>
+		<div id="plotdiv"></div>
+	</div>
+  </body>
+</html>
