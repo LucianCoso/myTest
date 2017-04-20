@@ -1,4 +1,5 @@
 
+#Read all tables from docx file
 getTablesFromDocx <- function(word_doc)
   {
   library("xml2")
@@ -8,14 +9,11 @@ getTablesFromDocx <- function(word_doc)
 
   file.copy(word_doc, tmpf)
   unzip(tmpf, exdir=sprintf("%s/docdata", tmpd))
-
   doc <- read_xml(sprintf("%s/docdata/word/document.xml", tmpd))
 
   unlink(tmpf)
   unlink(sprintf("%s/docdata", tmpd), recursive=TRUE)
-
   ns <- xml_ns(doc)
-
   tbls <- xml_find_all(doc, ".//w:tbl", ns=ns)
 
   lapply(tbls, function(tbl)
@@ -41,6 +39,6 @@ readDoc <- function(file)
     stop("Uploaded file must be a .docx file!")
     }
   doc <-as.data.frame(getTablesFromDocx(file))
-  list(values = doc$VALUE[1])
+  list(values = doc$VALUE)
   }
 
