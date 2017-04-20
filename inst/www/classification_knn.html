@@ -22,10 +22,10 @@
 					var req = ocpu.rpc("readDoc", {
 					  file : file,
 					}, function(session){
-						var result = session.values;
+						var result = String(session.values);
 						alert(result);
 						var array = result.split(',');
-						alert(array[0]);
+						alert(array[1]);
 						$("#lb").val(array[0]);
 						$("#lb").val("asdasd");
 						$("#ac").val(array[1]);
