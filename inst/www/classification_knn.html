@@ -23,8 +23,11 @@
 					  file : file,
 					}, function(session){
 						var result = session.values;
+						alert(result);
 						var array = result.split(',');
+						alert(array[0]);
 						$("#lb").val(array[0]);
+						$("#lb").val("asdasd");
 						$("#ac").val(array[1]);
 						$("#fm").val(array[2]);
 						$("#uc").val(array[3]);
