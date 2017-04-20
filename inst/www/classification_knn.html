@@ -22,7 +22,27 @@
 					var req = ocpu.rpc("readDoc", {
 					  file : file,
 					}, function(session){
-					  alert(session.values);
+						var result = session.values;
+						var array = result.split(',');
+						$("#lb").val(array[0]);
+						$("#ac").val(array[1]);
+						$("#fm").val(array[2]);
+						$("#uc").val(array[3]);
+						$("#dl").val(array[4]); 
+						$("#astv").val(array[5]);
+						$("#mstv").val(array[6]);
+						$("#altv").val(array[7]);
+						$("#mltv").val(array[8]);
+						$("#width").val(array[9]);
+						$("#min").val(array[10]);
+						$("#max").val(array[11]);
+						$("#nmax").val(array[12]);
+						$("#nzeros").val(array[13]);
+						$("#mode").val(array[14]);
+						$("#mean").val(array[15]);
+						$("#median").val(array[16]);
+						$("#variance").val(array[17]);
+						$("#tendency").val(array[18]);
 					});
 					//if R returns an error, alert the error message
 					req.fail(function(){
