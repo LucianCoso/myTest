@@ -1,3 +1,8 @@
 import(caret)
 
 export(getCarPrice)
+export(getDiagnostic)
+export(readDoc)
+export(getPlot)
+export(getClusters)
+export(getRecommendations)
