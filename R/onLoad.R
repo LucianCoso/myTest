@@ -7,6 +7,6 @@
   utils::data(countries_data, package = pkg, envir = parent.env(environment()))
   utils::data(transaction_data, package = pkg, envir = parent.env(environment()))
   utils::data(transaction_rules, package = pkg, envir = parent.env(environment()))
-  utils::data(docx/normalPacient, package = pkg, envir = parent.env(environment()))
+  utils::data(normalPacient, package = pkg, envir = parent.env(environment()))
 }
 
