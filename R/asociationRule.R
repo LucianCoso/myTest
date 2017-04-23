@@ -4,9 +4,9 @@ getRecommendations <- function(input)
   #library("arules")
 
   items <- unlist(strsplit(input, ','))
-  item1 <- toString(items[1])
-  item2 <- toString(items[2])
-  item3 <- toString(items[3])
+  item1 <- items[1]
+  item2 <- items[2]
+  item3 <- items[3]
 
   if(!is.na(item1) && !is.na(item2) && !is.na(item3)){
     subset_rule <- subset(transaction_rules, lhs %ain% c(item1, item2, item3))
