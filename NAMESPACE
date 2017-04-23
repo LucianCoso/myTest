@@ -1,5 +1,6 @@
 import(caret)
 import(arules)
+import(utils)
 
 export(getCarPrice)
 export(getDiagnostic)

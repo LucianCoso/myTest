@@ -17,11 +17,8 @@ subset_rule <- subset(transaction_rules, lhs %ain% c("soda", "sausage"))
 subset_rule <- subset(transaction_rules, lhs %in% "bottled water")
 inspect(sort(subset_rule, by = "lift"))
 
-mytest <- function()
+mytest <- function(test)
 {
-  test <-"yogurt,pastry,sausage"
-  test <-"yogurt,pastry"
-  #test <-"yogurt"
   test <-unlist(strsplit(test, ','))
   length(test)
   item1 <- test[1]
@@ -38,14 +35,29 @@ mytest <- function()
   } else if(!is.na(item1)) {
     subset_rule <- subset(transaction_rules, lhs %in% item1)
   }
+
+  if(length(subset_rule) == 0)
+  {
+    if(!is.na(item1) && !is.na(item2) && !is.na(item3)){
+      subset_rule <- subset(transaction_rules, lhs %in% c(item1, item2, item3))
+    } else if(!is.na(item1) && !is.na(item2)){
+      subset_rule <- subset(transaction_rules, lhs %in% c(item1, item2))
+    } else if(!is.na(item1)) {
+      subset_rule <- subset(transaction_rules, lhs %in% c(item1))
+    }
+  }
+
   inspect(sort(subset_rule, by = "lift"))
 
   ## Capture it, and extract rhs
   out <- capture.output(inspect(sort(subset_rule, by = "lift")))
   distinct_rhs <- gsub("[^{]+\\{([^}]*)\\}[^{]+\\{([^}]*)\\}.*", "\\2", out)[-1]
-  distinct_rhs <- unique(distinct_rhs)[1:3]
+  distinct_rhs <- unique(distinct_rhs)
+  if(length(distinct_rhs) > 3)
+    distinct_rhs <- distinct_rhs[1:3]
   distinct_rhs
 }
+mytest("brown bread")
 
 myTest2 <- function(){
   subset_rule <- apriori(transaction_data, parameter = list(support = 0.006, confidence = 0.25, minlen = 2, target="rules"), appearance = list(lhs = c(item1, item2), default="rhs"))
@@ -55,8 +67,4 @@ myTest2 <- function(){
     distinct_rhs <- unique(distinct_rhs)[1:3]
   distinct_rhs
 }
-
-mytest()
 myTest2()
-
-subset(transaction_rules)
