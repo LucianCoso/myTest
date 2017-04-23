@@ -31,9 +31,7 @@
 				//$("#results").empty();
 				for(i=0; i < list.length; i++){
 					alert(list[i]);
-					$("#results").append($("<option></option>")
-								 .attr("value",key)
-								 .text(list[i])); 
+					$("#results").append($("<option>"+list[i])+"</option>"); 
 				}
 			});
 
