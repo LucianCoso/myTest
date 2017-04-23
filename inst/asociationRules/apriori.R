@@ -49,15 +49,15 @@ mytest <- function(test)
 
   inspect(sort(subset_rule, by = "lift"))
 
-  ## Capture it, and extract rhs
-  out <- capture.output(inspect(sort(subset_rule, by = "lift")))
-  distinct_rhs <- gsub("[^{]+\\{([^}]*)\\}[^{]+\\{([^}]*)\\}.*", "\\2", out)[-1]
+  subset_rule <- sort(subset_rule, by = "lift")
+  distinct_rhs <- as(rhs(subset_rule), "list")
   distinct_rhs <- unique(distinct_rhs)
   if(length(distinct_rhs) > 3)
     distinct_rhs <- distinct_rhs[1:3]
   distinct_rhs
+
 }
-mytest("brown bread")
+mytest("soda")
 
 myTest2 <- function(){
   subset_rule <- apriori(transaction_data, parameter = list(support = 0.006, confidence = 0.25, minlen = 2, target="rules"), appearance = list(lhs = c(item1, item2), default="rhs"))

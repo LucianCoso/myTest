@@ -25,11 +25,11 @@ getRecommendations <- function(input)
     }
   }
 
-  out <- capture.output(inspect(sort(subset_rule, by = "lift")))
-  distinct_rhs <- gsub("[^{]+\\{([^}]*)\\}[^{]+\\{([^}]*)\\}.*", "\\2", out)[-1]
+  subset_rule <- sort(subset_rule, by = "lift")
+  distinct_rhs <- as(rhs(subset_rule), "list")
   distinct_rhs <- unique(distinct_rhs)
   if(length(distinct_rhs) > 3)
     distinct_rhs <- distinct_rhs[1:3]
 
-  list(recommendations = out);
+  list(recommendations = distinct_rhs);
 }
