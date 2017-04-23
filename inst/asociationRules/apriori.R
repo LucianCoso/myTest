@@ -21,7 +21,7 @@ mytest <- function()
 {
   test <-"yogurt,pastry,sausage"
   test <-"yogurt,pastry"
-  test <-"yogurt"
+  #test <-"yogurt"
   test <-unlist(strsplit(test, ','))
   length(test)
   item1 <- test[1]
@@ -39,7 +39,6 @@ mytest <- function()
     subset_rule <- subset(transaction_rules, lhs %in% item1)
   }
   inspect(sort(subset_rule, by = "lift"))
-
 
   ## Capture it, and extract rhs
   out <- capture.output(inspect(sort(subset_rule, by = "lift")))
@@ -59,3 +58,5 @@ myTest2 <- function(){
 
 mytest()
 myTest2()
+
+subset(transaction_rules)
