@@ -30,5 +30,5 @@ getRecommendations <- function(input)
   if(length(distinct_rhs) > 3)
     distinct_rhs <- unique(distinct_rhs)[1:3]
 
-  list(recommendations = item2);
+  list(recommendations = distinct_rhs);
 }
