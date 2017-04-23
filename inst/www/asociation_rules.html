@@ -26,7 +26,12 @@
 			var req = ocpu.rpc("getRecommendations", {
 				input : input
 			}, function(output){
-			  alert(output.recommendations);
+				var outputString =  String(output.recommendations);
+				var list = outputString.split(',');
+				$("#results").empty-cells();
+				for(i=0; i < list.length; i++){
+					$("#results").append(list[i]);
+				}
 			});
 
 			//if R returns an error, alert the error message
