@@ -28,8 +28,9 @@
 			}, function(output){
 				var outputString =  String(output.recommendations);
 				var list = outputString.split(',');
-				$("#results").empty();
+				//$("#results").empty();
 				for(i=0; i < list.length; i++){
+					append(list[i]);
 					$("#results").append(list[i]);
 				}
 			});
