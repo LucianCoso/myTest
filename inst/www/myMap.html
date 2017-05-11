@@ -14,14 +14,50 @@
   <body>
     <div id="map"></div>
     <script>
+	   function MeControl(controlDiv, map, isMine) {
+			// Set CSS for the control border.
+			var controlUI = document.createElement('div');
+			controlUI.style.backgroundColor = '#fff';
+			controlUI.style.border = '2px solid #fff';
+			controlUI.style.borderRadius = '4px';
+			controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+			controlUI.style.cursor = 'pointer';
+			controlUI.style.marginLeft = '1px';
+			controlUI.style.textAlign = 'center';
+			controlUI.title = 'Click to recenter the map';
+			controlDiv.appendChild(controlUI);
+
+			// Set CSS for the control interior.
+			var controlText = document.createElement('div');
+			controlText.style.color = 'rgb(25,25,25)';
+			controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+			controlText.style.fontSize = '16px';
+			controlText.style.lineHeight = '38px';
+			controlText.style.paddingLeft = '5px';
+			controlText.style.paddingRight = '5px';
+			controlText.innerHTML = isMine? 'EU' : 'SABRI';
+			controlUI.appendChild(controlText);
+
+			// Setup the click event listeners: simply set the map to Chicago.
+			controlUI.addEventListener('click', function() {
+			  loadMap(isMine);
+			});
+		}
+	
       function initMap() {
+		loadMap(true);
+	  }
+	  
+	  function loadMap(isMine) {
         var mapDiv = document.getElementById('map');
         var map = new google.maps.Map(mapDiv, {
           center: {lat: 46.00, lng: 15.00},
           zoom: 4,
-		  disableDefaultUI: true,
+		  zoomControl: false,
+		  scaleControl: false,
+		  mapTypeControl: false,
 		  styles: [
-            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'geometry', stylers: [{color: isMine? '#242f3e' : '#342f3e'}]},
             {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
             {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
             {
@@ -101,12 +137,32 @@
             }
 			]
         });
+		
+        var meDiv = document.createElement('div');
+        var centerControl = new MeControl(meDiv, map, true);
+        meDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(meDiv);
+		
+		var meDiv = document.createElement('div');
+        var centerControl = new MeControl(meDiv, map, false);
+        meDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(meDiv);
+		
+		// Countries hash
 		var world_geometry = new google.maps.FusionTablesLayer({
 		  query: {
 			select: 'geometry',
 			from: '1N2LBk4JHwWpOY4d9fobIn27lfnZ5MDy-NoqqRpk',
-			where: "ISO_2DIGIT IN ('RO','FR','GR','HU','AT','SK','IT','ES','MD','BG','CZ','PL','MT','GB')"
+			where: isMine ? "ISO_2DIGIT IN ('RO','FR','GR','HU','AT','SK','IT','ES','MD','BG','CZ','PL','MT','GB','CY')" : 
+				"ISO_2DIGIT IN ('RO','FR','GR','HU','AT','SK','IT','ES','MD','BG','CZ','PL','MT','GB','CY','DE','NL','BE','CH')"
 		  },
+		  styles: [{
+			polygonOptions: {
+				strokeColor: "#000000",
+				fillColor: isMine ? '#B0E0E6' : '#F0FFFF',
+				fillOpacity: ".75"
+			}
+		  }],
 		  map: map,
 		  suppressInfoWindows: true
 		});
