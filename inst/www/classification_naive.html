@@ -26,7 +26,11 @@
 			var req = ocpu.rpc("isSpam", {
 				input : $("#comment").val()
 			}, function(output){
-			  alert(output.result);
+			  if (0 == output.result)
+				$("#comments").append('<li class="list-group-item">' + $("#comment").val() + '</li>');
+			  else
+				alert("This comment is a spam. It will not be displayed!");
+			  
 			});
 
 			//if R returns an error, alert the error message
@@ -54,7 +58,7 @@
 			<textarea id="comment" rows="3" cols = "55"></textarea>
 			<input id="submitbutton" type="submit" value="Submit"></input>
 		</div>
-		<ul class="list-group">
+		<ul id="comments" class="list-group">
 		  <li class="list-group-item">Wow, just wow﻿</li>
 		  <li class="list-group-item">You guys are amazing.  I cant stop listening to you.  Im from Canada and will be recommending you to everyone I know.  keep up the amazing work﻿</li>
 		  <li class="list-group-item">Heard them yesterday for the first time, they are amazing, especially live. But the music in general is perfect too :D Love them!</li>
