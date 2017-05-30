@@ -12,8 +12,6 @@
     <script src="opencpu/jquery-3.1.1.min.js"></script>
     <script src="opencpu/opencpu-0.4.js"></script>
 	
-	<link rel="stylesheet" type="text/css" href="classification_naive.css">
-	
 	<script>
 		//init this script when the page has loaded
 		$(document).ready(function(){
@@ -21,10 +19,13 @@
 		  
 			//disable the button to prevent multiple clicks
 			$("#submitbutton").attr("disabled", "disabled");
-					
+			
+			var comm = $("#comment").val();
+			$("#comment").val('');
+			
 			//perform the request
 			var req = ocpu.rpc("isSpam", {
-				input : $("#comment").val()
+				input : comm
 			}, function(output){
 			  if (0 == output.result)
 				$("#comments").append('<li class="list-group-item">' + $("#comment").val() + '</li>');
