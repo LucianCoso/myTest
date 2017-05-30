@@ -1,4 +1,10 @@
-replacePunctuation <- function(x) { gsub("[[:punct:]]+", " ", x) }
+replacePunctuation <- function(x) {
+  gsub("[[:punct:]]+", " ", x)
+}
+
+convertCounts <- function(x) {
+  x <- ifelse(x > 0, "Yes", "No")
+}
 
 isSpam <- function(input) {
   comments[1957,]$CONTENT <- input
