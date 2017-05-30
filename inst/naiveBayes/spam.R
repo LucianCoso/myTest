@@ -5,6 +5,7 @@ comments$AUTHOR <- NULL
 comments$DATE <- NULL
 comments$CLASS <- factor(comments$CLASS)
 comments
+save(comments, file="data/comments.rda")
 
 library(tm)
 commentsCorpus <- VCorpus(VectorSource(comments$CONTENT))
