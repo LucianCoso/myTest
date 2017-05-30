@@ -14,8 +14,8 @@ summary(transaction_rules)
 inspect(transaction_rules[1:5])
 inspect(sort(transaction_rules, by = "lift")[1:5])
 subset_rule <- subset(transaction_rules, lhs %ain% c("soda", "sausage"))
-subset_rule <- subset(transaction_rules, lhs %in% "bottled water")
-inspect(sort(subset_rule, by = "lift"))
+subset_rule <- subset(transaction_rules, lhs %ain% c("yogurt"))
+unique(inspect(sort(subset_rule, by = "lift")))
 
 mytest <- function(test)
 {

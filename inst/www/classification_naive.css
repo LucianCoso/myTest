@@ -1,0 +1,30 @@
+body, html { 
+	height:100%; 
+	width:100%;
+	padding:0; 
+	margin:0;
+}
+
+
+a:link {
+	text-decoration: none;
+}
+
+fieldset {
+	width:100%;
+	max-width: 700px;
+}
+
+.divHalf {	
+	float:left; 
+	width:50% 
+}
+
+div{
+	width:100%;
+}
+
+select, .select {
+	width:95%;
+	height:30px;
+}

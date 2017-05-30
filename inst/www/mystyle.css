@@ -17,14 +17,14 @@ a:link {
 
 .row {
 	width:100%;
-	height: 25%; 
+	height: 20%; 
     text-align:center; 
     display:table;
 }
 
 .row h1 {
 	font-family:"Monospace", "Lucida Console";
-	font-size: 4vw;
+	font-size: 200%;
 	display:table-cell; 
 	vertical-align:middle;
 	color: white;
@@ -48,6 +48,5 @@ a:link {
     border-radius: 25px;
     border: 2px solid #FFFFFF;
     padding: 20px; 
-    width: auto;
-    height: 100px; 
+    width: auto; 
 }
