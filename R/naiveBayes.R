@@ -1,5 +1,5 @@
-isSpam <- function(text) {
-  comments[1957,]$CONTENT <- text
+isSpam <- function(input) {
+  comments[1957,]$CONTENT <- input
   comments[1957,]$CLASS <- 1
 
   commentsCorpus <- VCorpus(VectorSource(comments$CONTENT))
