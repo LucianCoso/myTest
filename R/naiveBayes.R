@@ -1,3 +1,5 @@
+replacePunctuation <- function(x) { gsub("[[:punct:]]+", " ", x) }
+
 isSpam <- function(input) {
   comments[1957,]$CONTENT <- input
   comments[1957,]$CLASS <- 1
