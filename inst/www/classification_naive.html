@@ -28,7 +28,7 @@
 				input : comm
 			}, function(output){
 			  if (0 == output.result)
-				$("#comments").append('<li class="list-group-item">' + $("#comment").val() + '</li>');
+				$("#comments").append('<li class="list-group-item">' + comm + '</li>');
 			  else
 				alert("This comment is a spam. It will not be displayed!");
 			  
