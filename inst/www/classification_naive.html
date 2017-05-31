@@ -49,22 +49,35 @@
 
   </head>
   <body>
-	<div class="container-fluid">
-		<div class="panel panel-default">
-			<div class="panel panel-default">
-				<iframe width="520" height="345" align="middle" src="https://www.youtube.com/embed/mnMA_fWYjR0">
-				</iframe>
-			</div>
-			<p>Leave a comment</p>
-			<textarea id="comment" rows="3" cols = "55"></textarea>
-			<input id="submitbutton" type="submit" value="Submit"></input>
+	<div class="container">
+		<div class="row" style="background-color: black";>
+			<div class="col-sm-1"></div>
+			<div class="col-sm-1"></div>
+			 <div class="col-sm-8">
+				<div class="bs-example" data-example-id="responsive-embed-16by9-iframe-youtube">
+				  <div class="embed-responsive embed-responsive-16by9">
+					<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/mnMA_fWYjR0" allowfullscreen=""></iframe>
+				  </div>
+				</div>
+			 </div>
 		</div>
-		<ul id="comments" class="list-group">
-		  <li class="list-group-item">Wow, just wow﻿</li>
-		  <li class="list-group-item">You guys are amazing.  I cant stop listening to you.  Im from Canada and will be recommending you to everyone I know.  keep up the amazing work﻿</li>
-		  <li class="list-group-item">Heard them yesterday for the first time, they are amazing, especially live. But the music in general is perfect too :D Love them!</li>
-		</ul> 
-		
+		<div class="row">
+			<div class="col-sm-12">
+			  <h4>Leave a comment</h4>
+			  <textarea class="form-control" rows="3" id="comment"></textarea>
+			  <input id="submitbutton" type="submit" value="Submit"></input>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<h4>Comments</h4>
+				<ul id="comments" class="list-group">
+				  <li class="list-group-item">Wow, just wow﻿</li>
+				  <li class="list-group-item">You guys are amazing.  I cant stop listening to you.  Im from Canada and will be recommending you to everyone I know.  keep up the amazing work﻿</li>
+				  <li class="list-group-item">Heard them yesterday for the first time, they are amazing, especially live. But the music in general is perfect too :D Love them!</li>
+				</ul> 
+			</div>
+		</div>
 	</div>
   </body>
 </html>
