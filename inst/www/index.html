@@ -7,95 +7,62 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
 	<style>
-		div {
-			background-color: black;
+		.col-md-4, .col-md-6 {
+			text-align:center;
+			padding:30px;
 		}
-		.container{
-			height: 100vh;
+		.col-xs-12 {
+			text-align:center;
 		}
-		.carousel slide
-			{
-			align:center;
-			}
 	</style>
   </head>
   <body>
+	<div class="panel panel-default" style="background-color:black; color:white; align:center">
+		<div class="panel-body" style="text-align:center">
+			<h4 style="text-align:center">Machine Learning in Web Applications using R language and OpenCPU</h4>
+		</div>
+	</div>
+	
 	<div class="container">
-		<div class="row">
-			<div class="col-sm-12">
-				<h2 style="color:white; text-align:center">Machine Learning in Web Applications using R language and OpenCPU</h2>
-			</div>
-		</div>
-		<div id="myCarousel" class="carousel slide" data-ride="carousel">
-			<!-- Indicators -->
-			<ol class="carousel-indicators">
-			  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			  <li data-target="#myCarousel" data-slide-to="1"></li>
-			  <li data-target="#myCarousel" data-slide-to="2"></li>
-			  <li data-target="#myCarousel" data-slide-to="3"></li>
-			  <li data-target="#myCarousel" data-slide-to="4"></li>
-			</ol>
-
-			<!-- Wrapper for slides -->
-			<div class="carousel-inner">
-				<div class="item active">
-					<a href="regression.html">
-						<img src="black.jpg" alt="Linear Model" style="width:100%;">
-						<div class="carousel-caption">
-							<h1>Regression</h1>
-							<h3>Linear Model</h3>
-						</div>
-					</a>
-				</div>
-				<div class="item">
-					<a href="classification_knn.html">
-						<img src="black.jpg" alt="K Nearest Neghbour" style="width:100%;">
-						<div class="carousel-caption">
-							<h1>Classification</h1>
-							<h3>K Nearest Neghbour</h3>
-						</div>
-					</a>
-				</div>
-				<div class="item">
-					<a href="classification_naive.html">
-						<img src="black.jpg" alt="Naive Bayes" style="width:100%;">
-						<div class="carousel-caption">
-							<h1>Classification</h1>
-							<h3>Naive Bayes</h3>
-						</div>
-					</a>
-				</div>
-				<div class="item">
-					<a href="clustering.html">
-						<img src="black.jpg" alt="K Means" style="width:100%;">
-						<div class="carousel-caption">
-							<h1>Clustering</h1>
-							<h3>K Means</h3>
-						</div>
-					</a>
-				</div>
-				<div class="item">
-					<a href="asociation_rules.html">
-						<img src="black.jpg" alt="Apriori" style="width:100%;">
-						<div class="carousel-caption">
-							<h1>Asociation rules</h1>
-							<h3>Apriori</h3>
-						</div>
-					</a>
-				</div>
-			</div>
-
-			<!-- Left and right controls -->
-			<a class="left carousel-control" href="#myCarousel" data-slide="prev">
-			  <span class="glyphicon glyphicon-chevron-left"></span>
-			  <span class="sr-only">Previous</span>
+      <div class="row">
+        <div class="col-md-4 col-xs-12">
+			<a href="regression.html" style="text-decoration:none">
+				<img class="img-circle" src="images/black.jpg" alt="Generic placeholder image" width="140" height="140">
+				<h2>Regression</h2>
+				<h4>Linear Model</h4>
 			</a>
-			<a class="right carousel-control" href="#myCarousel" data-slide="next">
-			  <span class="glyphicon glyphicon-chevron-right"></span>
-			  <span class="sr-only">Next</span>
+        </div>
+        <div class="col-md-4 col-xs-12">
+			<a href="classification_knn.html" style="text-decoration:none">
+				<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+				<h2>Classification</h2>
+				<h4>K Nearest Neghbour</h4>
 			</a>
-		</div>
+        </div>
+        <div class="col-md-4 col-xs-12" >
+			<a href="classification_naive.html" style="text-decoration:none">
+				<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+				<h2>Classification</h2>
+				<h4>Naive Bayes</h4>
+			</a>
+        </div>
+		<div class="col-md-6 col-xs-12">
+			<a href="clustering.html" style="text-decoration:none">
+				<img class="img-circle" src="images/kmeans.jpg" alt="Generic placeholder image" width="140" height="140">
+				<h2>Clustering</h2>
+				<h4>K Means</h4>
+			</a>
+        </div>
+		<div class="col-md-6 col-xs-12">
+			<a href="asociation_rules.html" style="text-decoration:none">
+				<img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+				<h2>Asociation rules</h2>
+				<h4>Apriori</h4>
+			</a>
+        </div>
+      </div>
 	</div>
   </body>
 </html>
