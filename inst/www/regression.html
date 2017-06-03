@@ -61,7 +61,6 @@
 	
 		//reset text and image
 		$("#output").text("");
-		$("#image").src("");
 		
 		var brand = $("#brand").val();
 		var model = $("#model").val();
@@ -96,8 +95,8 @@
         var req = ocpu.rpc("getCarPrice", {
 			input : car
         }, function(output){
-          $("#output").text("Recommended price for this car is " parseInt(output.carPrice) + " euro");
-		  $("#image").src("images/" + brand + "_" + model + ".jpg");
+          $("#output").text("Recommended price for this car is " + parseInt(output.carPrice) + " euro");
+
         });
 	
 		//if R returns an error, alert the error message
@@ -193,7 +192,7 @@
 					<h3 style="text-align:center; position:relative; top:50%;" id="output"></h3>
 				</div>
 				<div style="height:300px">
-					<img id="image" style="max-height:100%; max-width:100%;"></img>
+					<img class="img-thumbnail" id="image" style="max-height:100%; max-width:100%;"></img>
 				</div>
 			</div>
 		</div>
