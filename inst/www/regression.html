@@ -3,14 +3,17 @@
   <head>
 	<title>Regression - Linear Model</title>
 	
-	<link rel="stylesheet" type="text/css" href="regression.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	
 	<!-- Include order: first jquery, then opencpu.js, and then your code -->
     <script src="opencpu/jquery-3.1.1.min.js"></script>
     <script src="opencpu/opencpu-0.4.js"></script>
 	
-	<script>
-	
+	<script>	
 	// init Car info form
 	$(function () { 
 		var models = {
@@ -19,7 +22,7 @@
 			"Audi":["A3","A4"]
 		};
 		
-		$('#brand').append('<option disabled selected value>Brand</option>');
+		$('#brand').append('<option disabled selected value>Select Brand</option>');
 		$.each(models, function(key, value){            
 			$('#brand').append($('<option />').text(key));
 		});
@@ -27,13 +30,13 @@
 		$('#brand').change(function(){
 			var key = $(this).val();
 			$('#model').empty();
-			$('#model').append('<option disabled selected value>Model</option>');
+			$('#model').append('<option disabled selected value>Select model</option>');
 			for(var i in models[key]) {
 				$('#model').append('<option>' + models[key][i] + '</option>');
 			}
 		}).trigger('change');
 		
-		$('#year').append('<option disabled selected value>Manufacturing year</option>');
+		$('#year').append('<option disabled selected value>Select manufacturing year</option>');
 		for(var i = 2016; i > 1980; i--) {
 			$('#year').append($('<option />').text(i));
 		}
@@ -56,6 +59,10 @@
         //disable the button to prevent multiple clicks
         $("#submitbutton").attr("disabled", "disabled");
 	
+		//reset text and image
+		$("#output").text("");
+		$("#image").src("");
+		
 		var brand = $("#brand").val();
 		var model = $("#model").val();
 		var year = parseInt($("#year").val());
@@ -89,7 +96,8 @@
         var req = ocpu.rpc("getCarPrice", {
 			input : car
         }, function(output){
-          $("#output").text(parseInt(output.carPrice) + " euro");
+          $("#output").text("Recommended price for this car is " parseInt(output.carPrice) + " euro");
+		  $("#image").src("images/" + brand + "_" + model + ".jpg");
         });
 	
 		//if R returns an error, alert the error message
@@ -106,38 +114,89 @@
     </script>
   </head>
   <body>
-  <form class="carForm" id = "carForm">
-	<fieldset>
-		<legend>Car Info</legend>
-		<select name="brand" id="brand" placeholder="asdasd"></select>
-		<br><br>
-		<select name="model" id="model"></select>
-		<br><br>
-		<select name="year" id="year"></select>
-		<br><br>
-		<select name="fuel" id="fuel">
-			<option disabled selected value>Fuel type</option>
-			<option>Petrol</option>
-			<option>Diesel</option>
-		</select>
-		<br><br>
-		<input name="engine" class="select" id="engine" type="number" placeholder="Engine capacity" min="800" max="8400"></input>
-		<br><br>
-		<input name="km" class="select" id="km" type="number" placeholder="Number of km" min="0" max="2000000"></input>
-		<br><br>
-		<input name="hp" class="select" id="hp" type="number" placeholder="Horsepower" min="0" max="1200"></input>
-		<br><br>
-		<select name="euro" id="euro">
-			<option disabled selected value>Pollution norms</option>
-			<option>Euro 6</option>
-			<option>Euro 5</option>
-			<option>Euro 4</option>
-			<option>Euro 3 or older</option>
-		</select>
-		<br><hr>
-		<input id="submitbutton" type="submit" value="Get recommended price"></input>
-		<p style="display:inline" id="output"></p>
-	</fieldset>
-  </form>
+	<div class="container">
+		<div class="col-md-12">
+			<div class ="col-md-6">
+				<h2 style="text-align:center">Car Info</h2>
+				</br>
+				<form class="form-horizontal" id = "carForm">
+					<fieldset>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="brand">Brand:</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="brand" id="brand" placeholder="brand"></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="model">Model:</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="model" id="model"></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="year">Manufacturing year:</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="year" id="year"></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="fuel">Fuel type:</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="fuel" id="fuel">
+									<option disabled selected value>Select fuel type</option>
+									<option>Petrol</option>
+									<option>Diesel</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="engine">Engine capacity:</label>
+							<div class="col-sm-8">
+								<input class="form-control" name="engine" id="engine" type="number" placeholder="Engine capacity" min="800" max="8400"></input>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="km">Number of KM:</label>
+							<div class="col-sm-8">
+								<input class="form-control" name="km" id="km" type="number" placeholder="Enter number of km" min="0" max="2000000"></input>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="hp">Horsepower:</label>
+							<div class="col-sm-8">
+								<input class="form-control" name="hp" id="hp" type="number" placeholder="Enter horsepower" min="0" max="1200"></input>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="euro">Pollution norms:</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="euro" id="euro">
+									<option disabled selected value>Select pollution norms</option>
+									<option>Euro 6</option>
+									<option>Euro 5</option>
+									<option>Euro 4</option>
+									<option>Euro 3 or older</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+								<input class="form-control" id="submitbutton" type="submit" value="Get recommended price"></input>
+							</div>
+						</div>
+						<p style="display:inline" id="output"></p>
+					</fieldset>
+				</form>
+			</div>
+			<div class ="col-md-6">
+				<div style="height:150px">
+					<h3 style="text-align:center; position:relative; top:50%;" id="output"></h3>
+				</div>
+				<div style="height:300px">
+					<img id="image" style="max-height:100%; max-width:100%;"></img>
+				</div>
+			</div>
+		</div>
+	</div>
   </body>
 </html>
