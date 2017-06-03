@@ -61,7 +61,7 @@
 	
 		//reset text and image
 		$("#output").text("");
-		$(#image).src("");
+		$("#image").attr("src","");
 		
 		var brand = $("#brand").val();
 		var model = $("#model").val();
@@ -97,7 +97,7 @@
 			input : car
         }, function(output){
           $("#output").text("Recommended price for this car is " + parseInt(output.carPrice) + " euro.");
-		  $(#image).src("images/" + brand + "_" + model + ".jpg");
+		  $("#image").attr("src", "images/" + brand + "_" + model + ".jpg");
         });
 	
 		//if R returns an error, alert the error message
