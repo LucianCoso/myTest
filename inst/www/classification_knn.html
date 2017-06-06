@@ -127,11 +127,11 @@
 				 patient: patient
 			}, function(output){
 				switch(output.diagnostic) {
-					case "Normal": $("#output").html("<span class=\"glyphicons glyphicons-ok-circle\"></span>" + output.diagnostic);
+					case "Normal": $("#output").html("<span class=\"glyphicon glyphicons-ok-circle\"></span>" + output.diagnostic);
 						break;
-					case "Suspect": $("#output").html("<span class=\"glyphicons glyphicons-warning-sign\"></span>" + output.diagnostic);
+					case "Suspect": $("#output").html("<span class=\"glyphicon glyphicons-warning-sign\"></span>" + output.diagnostic);
 						break;
-					case "Pathologic": $("#output").html("<span class=\"glyphicons glyphicons-remove-circle\"></span>" + output.diagnostic);
+					case "Pathologic": $("#output").html("<span class=\"glyphicon glyphicons-remove-circle\"></span>" + output.diagnostic);
 						break;
 					default:
 						$("#output").html(output.diagnostic);
