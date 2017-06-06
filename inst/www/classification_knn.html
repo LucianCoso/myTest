@@ -127,8 +127,8 @@
 				 patient: patient
 			}, function(output){
 				alert(output.diagnostic);
-				alert(String(output.diagnostic);
-				switch(String(output.diagnostic)) {
+				alert(String(output.diagnostic));
+				switchString((output.diagnostic)) {
 					case "Normal": $("#output").html('<span class="glyphicon glyphicon-ok-circle"></span> ' + output.diagnostic);
 						break;
 					case "Suspect": $("#output").html('<span class="glyphicon glyphicon-warning-sign"></span> ' + output.diagnostic);
@@ -150,10 +150,6 @@
 			  $("#submitbutton").removeAttr("disabled")
 			});
       });
-	  
-	  $("#submitbutton2").on("click", function(){
-		$("#output").html('<span class="glyphicon glyphicon-remove-circle"></span> ' + "Test");
-	  });
     });
 	</script>
 
@@ -334,6 +330,5 @@
 			</diV>
 		<div>
 	</div>
-	<input class="form-control btn btn-info" id="submitbutton2" type="submit" value="Get diagnostic result"></input>
   </body>
 </html>
