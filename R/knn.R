@@ -1,7 +1,7 @@
 
-getDiagnostic <- function(input)
+getDiagnostic <- function(patient)
   {
-  patienData <- as.data.frame(input)
+  patienData <- as.data.frame(patient)
 
   stopifnot("LB" %in% names(patienData))
   stopifnot("AC" %in% names(patienData))

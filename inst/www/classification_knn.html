@@ -3,7 +3,11 @@
   <head>
 	<title>Classification - k Nearest Neighbour</title>
 
-	<link rel="stylesheet" type="text/css" href="classification_knn.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 	<!-- Include order: first jquery, then opencpu.js, and then your code -->
     <script src="opencpu/jquery-3.1.1.min.js"></script>
@@ -59,10 +63,12 @@
 			});
 		
 		  $("#submitbutton").on("click", function(){
+			$("#output").html("");
 			var $myForm = $('#myForm');
 			if (!$myForm[0].checkValidity())
 				$myForm.find(':submit').click();
-
+			
+				
 			if($("#lb").val() == "" || $("#ac").val() == "" || $("#fm").val() == "" || $("#uc").val() == "" || $("#dl").val() == "" || $("#astv").val() == "" || 
 				$("#mstv").val() == "" || $("#altv").val() == "" || $("#mltv").val() == "" || $("#width").val() == "" || $("#min").val() == "" || 
 				$("#max").val() == "" || $("#nmax").val() == "" || $("#nzeros").val() == "" || $("#mode").val()== "" || $("#median").val() == "" || 
@@ -74,7 +80,7 @@
 
 			//disable the button to prevent multiple clicks
 			$("#submitbutton").attr("disabled", "disabled");
-
+			
 			var lb = parseFloat($("#lb").val());
 			var ac = parseFloat($("#ac").val());
 			var fm = parseFloat($("#fm").val());
@@ -118,9 +124,18 @@
 
 			//perform the request
 			var req = ocpu.rpc("getDiagnostic", {
-				input : patient
+				 patient: patient
 			}, function(output){
-			  $("#output").text(output.diagnostic);
+				switch(output.diagnostic) {
+					case "Normal": $("#output").html("<span class='glyphicons glyphicons-ok-circle'></span>" + output.diagnostic);
+						break;
+					case "Suspect": $("#output").html("<span class='glyphicons glyphicons-warning-sign'></span>" + output.diagnostic);
+						break;
+					case "Pathologic": $("#output").html("<span class='glyphicons glyphicons-remove-circle'></span>" + output.diagnostic);
+						break;
+					default:
+						$("#output").html(output.diagnostic);
+				}
 			});
 
 			//if R returns an error, alert the error message
@@ -138,64 +153,180 @@
 
   </head>
   <body>
-  <form id="myForm">
-	<fieldset>
-		<legend>Results of medical tests</legend>
-		<div class="divHalf">
-			<input name="lb" class="select" id="lb" type="number" placeholder="FRH baseline (beats per minute)" title="FRH baseline (beats per minute)" min="0" max="200"></input>
-			<br>
-			<input name="ac" class="select" id="ac" type="number" step=any placeholder="Accelerations per second" title="Accelerations per second" min="0" max="1"></input>
-			<br>
-			<input name="fm" class="select" id="fm" type="number" step=any placeholder="Fetal movements per second" title="Fetal movements per second" min="0" max="1"></input>
-			<br>
-			<input name="uc" class="select" id="uc"  type="number" step=any placeholder="Uterine contractions per second" title="Uterine contractions per second" min="0" max="1"></input>
-			<br>
-			<input name="dl" class="select" id="dl" type="number" step=any placeholder="Light decelerations per second" title="Light decelerations per second" min="0" max="1"></input>
-			<br>
-			<input name="astv" class="select" id="astv" type="number" placeholder="Percentage of time with abnormal short term variability" title="Percentage of time with abnormal short term variability" min="0" max="200"></input>
-			<br>
-			<input name="mstv" class="select" id="mstv" type="number" step=any placeholder="Mean value of short term variability" title="Mean value of short term variability" min="0" max="200"></input>
-			<br>
-			<input name="altv" class="select" id="altv" type="number" placeholder="Percentage of time with abnormal long term variability" title="Percentage of time with abnormal long term variability" min="0" max="200"></input>
-			<br>
-			<input name="mltv" class="select" id="mltv" type="number" step=any placeholder="Mean value of long term variability" title="Mean value of long term variability" min="0" max="200"></input>
-			<br>
+	<div class="container-fluid">
+		<h2>Results of medical tests</h2>
+		<br>
+		<form class="form-horizontal" id="myForm">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="tendency">Read data from text file:</label>
+							<div class="col-sm-8">
+								<input class="form-control" name="fileInput" id="fileInput" type="file">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class ="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="lb">FRH baseline (beats per minute):</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="lb" id="lb" type="number" title="Enter a value between 0 and 300")" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="ac">Accelerations per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="ac" id="ac" type="number" title="Enter a value between 0 and 1" min="0" max="1">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="fm">Fetal movements per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="fm" id="fm" type="number" title="Enter a value between 0 and 1" min="0" max="1">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="uc">Uterine contractions per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="uc" id="uc" type="number" title="Enter a value between 0 and 1" min="0" max="1">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="dl">Light decelerations per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="dl" id="dl" type="number" title="Enter a value between 0 and 1" min="0" max="1">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="astv">Percentage of time with abnormal short term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="astv" id="astv" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mstv">Mean value of short term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mstv" id="mstv" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="altv">Percentage of time with abnormal long term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="altv" id="altv" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mltv">Mean value of long term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mltv" id="mltv" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+					</div>
+					<div class ="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="width">Width of FRH histogram:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="width" id="width" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="min">Minimum of FRH histogram:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="min" id="min" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="max">Maximum of FRH histogram:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="max" id="max" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="nmax">Number of histogram peaks:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="nmax" id="nmax" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="nzeros">Number of histogram zeros:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="nzeros" id="nzeros" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mode">Histogram mode:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mode" id="mode" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mean">Histogram mean:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mean" id="mean" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="median">Histogram median:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="median" id="median" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="variance">Histogram variance:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="variance" id="variance" type="number" title="Enter a value between 0 and 300" min="0" max="300">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="tendency">Histogram tendency:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="tendency" id="tendency" type="number" title="Enter a value between -1 and 1" min="-1" max="1">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-8" id="output"></label>
+							<div class="col-sm-4">
+								<input class="form-control btn btn-info" id="submitbutton" type="submit" value="Get diagnostic result"></input>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="divHalf">
-			<input name="width" class="select" id="width" type="number" placeholder="Width of FRH histogram" title="Width of FRH histogram" min="0" max="300"></input>
-			<br>
-			<input name="min" class="select" id="min" type="number" placeholder="Minimum of FRH histogram" title="Minimum of FRH histogram" min="0" max="300"></input>
-			<br>
-			<input name="max" class="select" id="max" type="number" placeholder="Maximum of FRH histogram" title="Maximum of FRH histogram" min="0" max="300"></input>
-			<br>
-			<input name="nmax" class="select" id="nmax" type="number" placeholder="Number of histogram peaks" title="Number of histogram peaks" min="0" max="300"></input>
-			<br>
-			<input name="nzeros" class="select" id="nzeros" type="number" placeholder="Number of histogram zeros" title="Number of histogram zeros" min="0" max="300"></input>
-			<br>
-			<input name="mode" class="select" id="mode" type="number" placeholder="Histogram mode" title="Histogram mode" min="0" max="300"></input>
-			<br>
-			<input name="mean" class="select" id="mean" type="number" placeholder="Histogram mean" title"Histogram mean" min="0" max="300"></input>
-			<br>
-			<input name="median" class="select" id="median" type="number" placeholder="Histogram median" title="Histogram median" min="0" max="300"></input>
-			<br>
-			<input name="variance" class="select" id="variance" type="number" placeholder="Histogram variance" title="Histogram variance" min="0" max="300"></input>
-			<br>
-			<input name="tendency" class="select" id="tendency" type="number" placeholder="Histogram tendency" title="Histogram tendency" min="-1" max="1"></input>
-		</div>
-
-		<legend></legend>
-		<div>
-			Read data from text file:
-			<input type="file" id="fileInput">
-		</div>
-	</fieldset>
+	</form>
+	
 	<br>
-	<input id="submitbutton" type="submit" value="Get diagnostic result"></input>
-	<p style="display:inline" id="output"></p>
-	<br><br>
-	<a href="../knn/normalPacient.docx"><input type="button" value="Download normal pacient sample"></input></a>
-	<a href="../knn/suspectPacient.docx"><input type="button" value="Download suspect pacient sample"></input></a>
-	<a href="../knn/pathologicPacient.docx"><input type="button" value="Download pathologic pacient sample"></input></a>
-  </form>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-3">
+				<a href="../knn/normalPacient.docx"><input class="form-control btn btn-success" type="button" value="Download normal pacient sample"></input></a>
+			</diV>
+		<div>
+	</div>
+		<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-3">
+				<a href="../knn/suspectPacient.docx"><input class="form-control btn btn-warning" type="button" value="Download suspect pacient sample"></input></a>
+			</diV>
+		<div>
+	</div>
+		<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-3">
+				<a href="../knn/pathologicPacient.docx"><input class="form-control btn btn-danger" type="button" value="Download pathologic pacient sample"></input></a>
+			</diV>
+		<div>
+	</div>
   </body>
 </html>
