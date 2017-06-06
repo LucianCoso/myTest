@@ -126,7 +126,7 @@
 			var req = ocpu.rpc("getDiagnostic", {
 				 patient: patient
 			}, function(output){
-				switch(output.diagnostic) {
+				switch(String(output.diagnostic)) {
 					case "Normal": $("#output").html('<span class="glyphicon glyphicon-ok-circle"></span> ' + output.diagnostic);
 						break;
 					case "Suspect": $("#output").html('<span class="glyphicon glyphicon-warning-sign"></span> ' + output.diagnostic);
