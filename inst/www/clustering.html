@@ -3,6 +3,11 @@
   <head>
 	<title>Clustering - kmeans</title>
 	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="clustering.css">
 	
 	<!-- Include order: first jquery, then opencpu.js, and then your code -->
@@ -277,44 +282,57 @@
 
   </head>
   <body>
-	<form>
-		Number of clusterts
-		<input name="nrClusters" id="nrClusters" type="number" value="3" min="1" max="5" /></input>
-		<button id="changeNrClusters" type="button" value="Change">Change</button>
-	</form>
-	<br>
-	
-	<div class="tab">
-		<button class="tablinks" onclick="openTab(event, 'map')" id="defaultOpen">Map</button>
-		<button class="tablinks" onclick="openTab(event, 'plot')">Plot</button>
-	</div>
-	
-	<div id="map" class="tabcontent">
-	</div>
-	
-	<div id="plot" class="tabcontent">
-		<form>
-			X axis
-			<select name="xaxis" id = "xaxis">
-				<option value="Per_capita_income" selected>Per capita income</option>
-				<option value="Literacy">Literacy</option>
-				<option value="Infant_mortality">Infant mortality</option>
-				<option value="Life_expectancy">Life expectancy</option>
-				<option value="Murder_rate">Murder rate</option>
-			</select>
-			<br><br>
-			Y axis
-			<select name="yaxis" id="yaxis">
-				<option value="Per_capita_income">Per capita income</option>
-				<option value="Literacy">Literacy</option>
-				<option value="Infant_mortality">Infant mortality</option>
-				<option value="Life_expectancy" selected>Life expectancy</option>
-				<option value="Murder_rate">Murder rate</option>
-			</select>
-			<br><br>
-			<button id="getPlot" type="button" value="Get plot">Get plot</button>
+	<div class="container">
+		<form class="form-inline" id="myForm">
+			<div class="form-group">
+				<label for="nrClusters">Number of clusterts:</label>
+				<input class="form-control" name="nrClusters" id="nrClusters" type="number" value="3" min="1" max="5" /></input>
+				<button class="btn btn-info" id="changeNrClusters" type="button" value="Change">Change</button>
+			</div>
 		</form>
-		<div id="plotdiv"></div>
+
+		<div class="btn-group">
+			<button class="tablinks btn btn-info" onclick="openTab(event, 'map')" id="defaultOpen">Map</button>
+			<button class="tablinks btn btn-info" onclick="openTab(event, 'plot')">Plot</button>
+		</diV>
+	
+		<div id="map" class="tabcontent col-sm-12">
+		</div>
+		
+		<div id="plot" class="tabcontent col-sm-12">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="control-label col-sm-1" for="xaxis">X axis:</label>
+					<div class="col-sm-2">
+						<select class="form-control" name="xaxis" id = "xaxis">
+							<option value="Per_capita_income" selected>Per capita income</option>
+							<option value="Literacy">Literacy</option>
+							<option value="Infant_mortality">Infant mortality</option>
+							<option value="Life_expectancy">Life expectancy</option>
+							<option value="Murder_rate">Murder rate</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-1" for="yaxis">Y axis:</label>
+					<div class="col-sm-2">
+						<select class="form-control" name="yaxis" id="yaxis">
+							<option value="Per_capita_income">Per capita income</option>
+							<option value="Literacy">Literacy</option>
+							<option value="Infant_mortality">Infant mortality</option>
+							<option value="Life_expectancy" selected>Life expectancy</option>
+							<option value="Murder_rate">Murder rate</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					 <div class="col-sm-offset-1 col-sm-2">
+						<button class="btn btn-info" id="getPlot" type="button" value="Get plot">Get plot</button>
+					</div>
+				</div>
+			</form>
+			<div  class="col-sm-offset-1 col-sm-11" id="plotdiv"></div>
+		</div>
 	</div>
   </body>
 </html>
