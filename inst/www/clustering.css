@@ -30,16 +30,16 @@ a:link {
 }
 
 #map {
-	height:90%;
+	height:650px;
 	background-color: black;
 }
 
 #plot{
-	height:90%;
+	height:650px;
 }
 
 #plotdiv {
 	visibility: hidden;
-    height:77%;
+    height:500px;
     border: solid gray 1px;
 }
