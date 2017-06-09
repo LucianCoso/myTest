@@ -282,15 +282,16 @@
 
   </head>
   <body>
-	<div class="container">
-		<form class="form-inline" id="myForm">
-			<div class="form-group">
-				<label for="nrClusters">Number of clusterts:</label>
-				<input class="form-control" name="nrClusters" id="nrClusters" type="number" value="3" min="1" max="5" /></input>
-				<button class="btn btn-info" id="changeNrClusters" type="button" value="Change">Change</button>
-			</div>
-		</form>
-
+	<div class="container" style="height:100%">
+		<div class="row" style="height:5%" >
+			<form class="form-inline" id="myForm">
+				<div class="form-group">
+					<label for="nrClusters">Number of clusterts:</label>
+					<input class="form-control" name="nrClusters" id="nrClusters" type="number" value="3" min="1" max="5" /></input>
+					<button class="btn btn-info" id="changeNrClusters" type="button" value="Change">Change</button>
+				</div>
+			</form>
+		</div>
 		<div class="btn-group">
 			<button class="tablinks btn btn-info" onclick="openTab(event, 'map')" id="defaultOpen">Map</button>
 			<button class="tablinks btn btn-info" onclick="openTab(event, 'plot')">Plot</button>
