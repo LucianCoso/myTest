@@ -1,9 +1,17 @@
 #This script was used to create the countries cluster that is included with the package
 
 countries_data <- read.csv("inst/clustering/Country.csv", header = TRUE, stringsAsFactors = FALSE)
+str(countries_data)
 
 library(ggplot2)
 ggplot(countries_data, aes(Per_capita_income, Infant_mortality, color = Country)) + geom_point()
+
+#Elbow Method for finding the optimal number of clusters
+elbow <- sapply(1:10, function(k){kmeans(countries_data[,2:6], k, nstart=50,iter.max = 15 )$tot.withinss})
+plot(1:10, elbow,
+     type="b", pch = 19, frame = FALSE,
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares")
 
 set.seed(1234)
 countries_cluster <- kmeans(countries_data[,2:6], 3, nstart = 15)

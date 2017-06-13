@@ -1,28 +1,43 @@
 #This script was used to create the knn classifier that is included with the package
 
+# Import data
 cardio <- read.csv("inst/knn/Cardio.csv", stringsAsFactors = FALSE)
+cardio$DS
+cardio$DP
 cardio$DS <- NULL
 cardio$DP <- NULL
+table(cardio$NSP)
+
+# Data frame normalization
 normalize <- function(x) { return ((x - min(x)) / (max(x) - min(x)))}
-cardio_norm <- as.data.frame(lapply(cardio[1:20], normalize))
+cardioNorm <- as.data.frame(lapply(cardio[1:20], normalize))
 
-cardio_norm$NSP <- factor(cardio_norm$NSP, levels = c(0.0, 0.5, 1.0), labels = c("Normal","Suspect", "Pathologic"))
-barplot(table(cardio_norm$NSP), main="Categories", col="black")
+# Set target value as factor
+cardio$NSP <- factor(cardio$NSP, levels = c(1, 2, 3), labels = c("Normal","Suspect", "Pathologic"))
+cardioNorm$NSP <- factor(cardioNorm$NSP, levels = c(0.0, 0.5, 1.0), labels = c("Normal","Suspect", "Pathologic"))
+barplot(table(cardio$NSP), main="Categories", col="black")
+barplot(table(cardioNorm$NSP), main="Categories", col="black")
 
+# Split data into train and test
 library(caret)
 set.seed(1234)
-inTrainRows <- createDataPartition(cardio_norm$NSP, p=0.70, list = FALSE)
-cardio_train <- cardio_norm[inTrainRows, 1:19]
-cardio_test <- cardio_norm[-inTrainRows, 1:19]
-cardio_train_labels <- cardio_norm[inTrainRows, 20]
-cardio_test_labels <- cardio_norm[-inTrainRows, 20]
+inTrainRows <- createDataPartition(cardioNorm$NSP, p=0.70, list = FALSE)
+cardioTrain <- cardioNorm[inTrainRows, 1:19]
+cardioTest <- cardioNorm[-inTrainRows, 1:19]
+cardioTrainLabels <- cardioNorm[inTrainRows, 20]
+cardioTestLabels <- cardioNorm[-inTrainRows, 20]
 
+# Apply knn from class library
 library(class)
+cardioModel <- knn(train = cardioTrain, test = cardioTest, cl = cardioTrainLabels, k = 13)
+
+# Verify the results
 library(gmodels)
-cardio_model <- knn(train = cardio_train, test = cardio_test, cl = cardio_train_labels, k = 13)
-CrossTable(x = cardio_test_labels, y = cardio_model, prop.chisq = FALSE)
+CrossTable(x = cardioTestLabels, y = cardioModel, prop.chisq = FALSE)
 
-knn(train = cardio_train, test = cardio_test[1,1:19], cl = cardio_train_labels, k = 13)
+# Test
+knn(train = cardioTrain, test = cardioTest[1,1:19], cl = cardioTrainTabels, k = 13)
 
-cardio_data <- cardio_norm[inTrainRows, 1, 20]
+# Save cardio data
+cardio_data <- cardioNorm[inTrainRows, 1, 20]
 save(cardio_data, file="data/cardio_data.rda")

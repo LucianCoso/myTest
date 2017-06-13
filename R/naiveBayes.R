@@ -33,3 +33,4 @@ isSpam <- function(input) {
   commentsClassifier <- naiveBayes(commentsTrain, commentsLabelsTrain)
   list(result = predict(commentsClassifier, commentsTest)[2])
 }
+

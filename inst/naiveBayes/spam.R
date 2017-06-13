@@ -1,5 +1,6 @@
 #This script was used to create the naive Bayes classifier that is included with the package
 
+# Import and clean data
 comments <- read.csv("inst/naiveBayes/Youtube.csv", stringsAsFactors = FALSE)
 comments$AUTHOR <- NULL
 comments$DATE <- NULL
@@ -7,6 +8,7 @@ comments$CLASS <- factor(comments$CLASS)
 comments
 save(comments, file="data/comments.rda")
 
+# Text minig
 library(tm)
 commentsCorpus <- VCorpus(VectorSource(comments$CONTENT))
 lapply(commentsCorpus[1:18], as.character)
@@ -23,6 +25,7 @@ commentsCorpus <- tm_map(commentsCorpus, stripWhitespace)
 library(SnowballC)
 commentsCorpus <- tm_map(commentsCorpus, stemDocument)
 
+# DTM creation
 commentsDtm <- DocumentTermMatrix(commentsCorpus)
 commentsDtmTrain <- commentsDtm[1:1500, ]
 commentsDtmTest <- commentsDtm[1501:1956, ]
@@ -32,12 +35,14 @@ commentsLabelsTest <- comments[1501:1956, ]$CLASS
 prop.table(table(commentsLabelsTrain))
 prop.table(table(commentsLabelsTest))
 
+# Words frequency
 library(wordcloud)
-wordcloud(commentsCorpus, min.freq = 20, random.order = FALSE)
+pal2 <- brewer.pal(8,"Dark2")
+wordcloud(commentsCorpus, min.freq = 40, random.order = FALSE, colors = pal2)
 commentsHam <- subset(comments, CLASS == 0)
 commentsSpam <- subset(comments, CLASS == 1)
-wordcloud(commentsHam$CONTENT, max.words = 50, scale = c(3, 0.5))
-wordcloud(commentsSpam$CONTENT, max.words = 50, scale = c(3, 0.5))
+wordcloud(commentsHam$CONTENT, max.words = 80, random.order = FALSE, scale = c(3, 0.5), colors = pal2)
+wordcloud(commentsSpam$CONTENT, max.words = 80, random.order = FALSE, scale = c(3, 0.5), colors = pal2)
 
 commentsFreqWords <- findFreqTerms(commentsDtmTrain, 5)
 commentsDtmFreqTrain <- commentsDtmTrain[ , commentsFreqWords]
@@ -57,6 +62,8 @@ library(gmodels)
 commentsPrediction <- predict(commentsClassifier, commentsTest)
 CrossTable(commentsPrediction, commentsLabelsTest, prop.chisq = FALSE, prop.t = FALSE, dnn = c('predicted', 'actual'))
 
+
+# Function for test
 isSpam <- function(text) {
   comments[1957,]$CONTENT <- text
   comments[1957,]$CLASS <- 1
@@ -86,4 +93,6 @@ isSpam <- function(text) {
   predict(commentsClassifier, commentsTest)[2]
 }
 
-isSpam("check my blog on https://myblog.com/asdasdaf")
+VCorpus(VectorSource("Adsasd"))
+
+isSpam2("check my blog on https://myblog.com/asdasdaf")
