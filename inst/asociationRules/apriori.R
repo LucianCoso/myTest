@@ -6,7 +6,7 @@ itemFrequency(transaction_data[ ,1:10])
 itemFrequencyPlot(transaction_data, support = 0.1)
 itemFrequencyPlot(transaction_data, topN = 40)
 
-transaction_rules <- apriori(transaction_data, parameter = list(support = 0.005, confidence = 0.20, minlen = 2))
+transaction_rules <- apriori(transaction_data, parameter = list(support = 0.006, confidence = 0.25, minlen = 2))
 save(transaction_data, file="data/transaction_data.rda")
 save(transaction_rules, file="data/transaction_rules.rda")
 
