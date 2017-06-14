@@ -3,6 +3,12 @@
   <head>
 	<title>Regression - Linear Model</title>
 	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="clustering.css">
 	<link rel="stylesheet" type="text/css" href="asociation_rules.css">
 	
 	<!-- Include order: first jquery, then opencpu.js, and then your code -->
@@ -50,67 +56,75 @@
     </script>
   </head>
   <body>
-	<section class="container">
-		<div>
-			<p style="display:inline">Available items:</p>
-			</br>
-			<select id="leftValues" size="10">
-				<option>whole milk</option>
-				<option>other vegetables</option>
-				<option>rolls/buns</option>
-				<option>soda</option>
-				<option>yogurt</option>
-				<option>bottled water</option>
-				<option>root vegetables</option>
-				<option>tropical fruit</option>
-				<option>shopping bags</option>
-				<option>sausage</option>
-				<option>pastry</option>
-				<option>citrus fruit</option>
-				<option>bottled beer</option>
-				<option>newspapers</option>
-				<option>pip fruit</option>
-				<option>fruit/vegetable juice</option>
-				<option>whipped/sour cream</option>
-				<option>brown bread</option>
-				<option>domestic eggs</option>
-				<option>margarine</option>
-				<option>coffee</option>
-				<option>pork</option>
-				<option>butter</option>
-				<option>curd</option>
-				<option>beef</option>
-				<option>napkins</option>
-				<option>chocolate</option>
-				<option>frozen vegetables</option>
-				<option>chicken</option>
-				<option>white bread</option>
-				<option>cream cheese</option>
-				<option>waffles</option>
-				<option>salty snack</option>
-				<option>dessert</option>
-				<option>sugar</option>
-				<option>UHT-milk</option>
-				<option>berries</option>
-			</select>
-		</div>
-		<div>
-			<input type="button" id="btnLeft" value="&lt;&lt;" />
-			<input type="button" id="btnRight" value="&gt;&gt;" />
-		</div>
-		<div>
-			<p style="display:inline" >Selected items:</p>
-			</br>
-			<select id="rightValues" size="3" multiple max=3>
-			</select>
-			<input id="submitbutton" type="submit" value="Get recommendations" disabled=true></input>
-			</br></br>
-			<p style="display:inline">Recommended items:</p>
-			<select id="results" size="3" multiple max=3>
-			</select>
-		</div>
-	</section>
-	
+	<div class="container">
+		<h2>Groceries market basket analysis</h2>
+		<form>
+			<div class="form-group  col-sm-4">
+				<div>
+					<p style="display:inline">Available items:</p>
+					</br>
+					<select class="form-control" data-style="btn-default" id="leftValues" size="20">
+						<option >whole milk</option>
+						<option>other vegetables</option>
+						<option>rolls/buns</option>
+						<option>soda</option>
+						<option>yogurt</option>
+						<option>bottled water</option>
+						<option>root vegetables</option>
+						<option>tropical fruit</option>
+						<option>shopping bags</option>
+						<option>sausage</option>
+						<option>pastry</option>
+						<option>citrus fruit</option>
+						<option>bottled beer</option>
+						<option>newspapers</option>
+						<option>pip fruit</option>
+						<option>fruit/vegetable juice</option>
+						<option>whipped/sour cream</option>
+						<option>brown bread</option>
+						<option>domestic eggs</option>
+						<option>margarine</option>
+						<option>coffee</option>
+						<option>pork</option>
+						<option>butter</option>
+						<option>curd</option>
+						<option>beef</option>
+						<option>napkins</option>
+						<option>chocolate</option>
+						<option>frozen vegetables</option>
+						<option>chicken</option>
+						<option>white bread</option>
+						<option>cream cheese</option>
+						<option>waffles</option>
+						<option>salty snack</option>
+						<option>dessert</option>
+						<option>sugar</option>
+						<option>UHT-milk</option>
+						<option>berries</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group  col-sm-1">
+				<div>
+					<input type="button" class="btn btn-info" id="btnLeft" value="&lt;&lt;" />
+					<input type="button" class="btn btn-info" id="btnRight" value="&gt;&gt;" />
+				</div>
+			</div>
+			<div class="form-group  col-sm-4">
+				<div>
+					<label>Selected items:</label>
+					</br>
+					<select class="form-control" data-style="btn-info" id="rightValues" size="3" multiple max=3>
+					</select>
+					<input id="submitbutton" type="submit" class="btn btn-info" value="Get recommendations" disabled=true></input>
+					</br></br>
+					<label>Recommended items:</label>
+					<select class="form-control" data-style="btn-success" id="results" size="3" multiple max=3>
+					</select>
+				</div>
+			</div>
+		</form>
+	</div>
 	<script>
 		$("#btnLeft").click(function () {
 			var selectedItem = $("#rightValues option:selected");
