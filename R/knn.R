@@ -29,3 +29,4 @@ getDiagnostic <- function(patient)
   library(class)
   list(diagnostic = knn(train = cardio_train, test = patienData, cl = cardio_train_labels, k = 13))
   }
+
