@@ -27,6 +27,6 @@ getDiagnostic <- function(patient)
   cardio_train_labels<-cardio_data[,20]
 
   library(class)
-  list(diagnostic = knn(train = cardio_train, test = patienData, cl = cardio_train_labels, k = 13))
+  list(diagnostic = knn(train = cardio_train, test = patienData[1,1:19], cl = cardio_train_labels, k = 13))
   }
 
