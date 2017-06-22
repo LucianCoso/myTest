@@ -23,10 +23,10 @@ getDiagnostic <- function(patient)
   stopifnot("Variance" %in% names(patienData))
   stopifnot("Tendency" %in% names(patienData))
 
-  cardio_train<-cardio_data[,1:19]
-  cardio_train_labels<-cardio_data[,20]
+  cardioTrain<-cardio_data[,1:19]
+  cardioTrainLabels<-cardio_data[,20]
 
   library(class)
-  list(diagnostic = knn(train = cardio_train, test = patienData, cl = cardio_train_labels, k = 13))
+  list(diagnostic = knn(train = cardioTrain, test = patienData, cl = cardioTrainLabels, k = 13))
   }
 

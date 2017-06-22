@@ -39,6 +39,6 @@ CrossTable(x = cardioTestLabels, y = cardioModel, prop.chisq = FALSE)
 knn(train = cardioTrain, test = cardioTest[1,1:19], cl = cardioTrainLabels, k = 13)
 
 # Save cardio data
-cardio_data <- cardioNorm[inTrainRows, 1:20]
+cardio_data <- cardioNorm[inTrainRows, 1, 20]
 cardio_data
 save(cardio_data, file="data/cardio_data.rda")
