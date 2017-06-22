@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>Classification - k Nearest Neighbour</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<!-- Include order: first jquery, then opencpu.js, and then your code -->
+    <script src="opencpu/jquery-3.1.1.min.js"></script>
+    <script src="opencpu/opencpu-0.4.js"></script>
+
+	<script>
+		//init this script when the page has loaded
+		$(document).ready(function(){
+			 $("#fileInput").on("change", function(){
+				var file = fileInput.files[0];
+				var textType = /doc.*/;
+				if (file.type.match(textType)) {
+					//disable the button to prevent multiple clicks
+					$("#fileInput").attr("disabled", "disabled");
+					
+					var req = ocpu.rpc("readDoc", {
+					  file : file,
+					}, function(session){
+						var result = String(session.values);
+						var array = result.split(',');
+						$("#lb").val(array[0]);
+						$("#ac").val(array[1]);
+						$("#fm").val(array[2]);
+						$("#uc").val(array[3]);
+						$("#dl").val(array[4]); 
+						$("#astv").val(array[5]);
+						$("#mstv").val(array[6]);
+						$("#altv").val(array[7]);
+						$("#mltv").val(array[8]);
+						$("#width").val(array[9]);
+						$("#min").val(array[10]);
+						$("#max").val(array[11]);
+						$("#nmax").val(array[12]);
+						$("#nzeros").val(array[13]);
+						$("#mode").val(array[14]);
+						$("#mean").val(array[15]);
+						$("#median").val(array[16]);
+						$("#variance").val(array[17]);
+						$("#tendency").val(array[18]);
+					});
+					//if R returns an error, alert the error message
+					req.fail(function(){
+					  alert("Server error: " + req.responseText);
+					});
+
+					//after request complete, re-enable the button
+					req.always(function(){
+					  $("#fileInput").removeAttr("disabled")
+					});
+				} else {
+					alert("File not supported!");
+				}
+			});
+		
+		  $("#submitbutton").on("click", function(){
+			$("#output").html("");
+			var $myForm = $('#myForm');
+			if (!$myForm[0].checkValidity())
+				$myForm.find(':submit').click();
+			
+				
+			if($("#lb").val() == "" || $("#ac").val() == "" || $("#fm").val() == "" || $("#uc").val() == "" || $("#dl").val() == "" || $("#astv").val() == "" || 
+				$("#mstv").val() == "" || $("#altv").val() == "" || $("#mltv").val() == "" || $("#width").val() == "" || $("#min").val() == "" || 
+				$("#max").val() == "" || $("#nmax").val() == "" || $("#nzeros").val() == "" || $("#mode").val()== "" || $("#median").val() == "" || 
+				$("#variance").val() == "" || $("#tendency").val() == "" || $("#mean").val() == "")
+				{
+				alert("One of the input values is missing!");
+				return false;
+				}
+
+			//disable the button to prevent multiple clicks
+			$("#submitbutton").attr("disabled", "disabled");
+			
+			var lb = parseFloat($("#lb").val());
+			var ac = parseFloat($("#ac").val());
+			var fm = parseFloat($("#fm").val());
+			var uc = parseFloat($("#uc").val());
+			var dl = parseFloat($("#dl").val());
+			var astv = parseFloat($("#astv").val());
+			var mstv = parseFloat($("#mstv").val());
+			var altv = parseFloat($("#altv").val());
+			var mltv = parseFloat($("#mltv").val());
+			var width = parseFloat($("#width").val());
+			var min = parseFloat($("#min").val());
+			var max = parseFloat($("#max").val());
+			var nmax = parseFloat($("#nmax").val());
+			var nzeros = parseFloat($("#nzeros").val());
+			var mode = parseFloat($("#mode").val());
+			var mean = parseFloat($("#mean").val());
+			var median = parseFloat($("#median").val());
+			var variance = parseFloat($("#variance").val());
+			var tendency = parseFloat($("#tendency").val());
+			
+			var patient = [{ LB : lb,
+				AC : ac,
+				FM : fm,
+				UC : uc,
+				DL : dl,
+				ASTV : astv,
+				MSTV : mstv,
+				ALTV : altv,
+				MLTV : mltv,
+				Width : width,
+				Min : min,
+				Max : max,
+				Nmax : nmax,
+				Nzeros : nzeros,
+				Mode : mode,
+				Mean : mean,
+				Median : median,
+				Variance : variance,
+				Tendency : tendency
+				}];
+
+			//perform the request
+			var req = ocpu.rpc("getDiagnostic", {
+				 patient: patient
+			}, function(output){
+				alert(String(output.diagnostic));
+				switch(String(output.diagnostic)) {
+					case "Normal": $("#output").html('<span class="glyphicon glyphicon-ok-circle"></span> ' + output.diagnostic);
+						break;
+					case "Suspect": $("#output").html('<span class="glyphicon glyphicon-warning-sign"></span> ' + output.diagnostic);
+						break;
+					case "Pathologic": $("#output").html('<span class="glyphicon glyphicon-remove-circle"></span> ' + output.diagnostic);
+						break;
+					default:
+						$("#output").html(output.diagnostic);
+				}
+			});
+
+			//if R returns an error, alert the error message
+			req.fail(function(){
+			  alert("Server error: " + req.responseText);
+			});
+
+			//after request complete, re-enable the button
+			req.always(function(){
+			  $("#submitbutton").removeAttr("disabled")
+			});
+      });
+    });
+	</script>
+
+  </head>
+  <body>
+	<div class="container-fluid">
+		<h2>Results of medical tests</h2>
+		<br>
+		<form class="form-horizontal" id="myForm">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" for="tendency">Read data from text file:</label>
+							<div class="col-sm-8">
+								<input class="form-control" name="fileInput" id="fileInput" type="file">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class ="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="lb">FRH baseline (beats per minute):</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="lb" id="lb" type="number" title="Enter a value between 0 and 300")" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="ac">Accelerations per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="ac" id="ac" type="number" title="Enter a value between 0 and 1" min="0" max="1" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="fm">Fetal movements per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="fm" id="fm" type="number" title="Enter a value between 0 and 1" min="0" max="1" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="uc">Uterine contractions per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="uc" id="uc" type="number" title="Enter a value between 0 and 1" min="0" max="1" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="dl">Light decelerations per second:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="dl" id="dl" type="number" title="Enter a value between 0 and 1" min="0" max="1" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="astv">Percentage of time with abnormal short term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="astv" id="astv" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mstv">Mean value of short term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mstv" id="mstv" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="altv">Percentage of time with abnormal long term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="altv" id="altv" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mltv">Mean value of long term variability:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mltv" id="mltv" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+					</div>
+					<div class ="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="width">Width of FRH histogram:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="width" id="width" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="min">Minimum of FRH histogram:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="min" id="min" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="max">Maximum of FRH histogram:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="max" id="max" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="nmax">Number of histogram peaks:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="nmax" id="nmax" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="nzeros">Number of histogram zeros:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="nzeros" id="nzeros" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mode">Histogram mode:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mode" id="mode" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="mean">Histogram mean:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="mean" id="mean" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="median">Histogram median:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="median" id="median" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="variance">Histogram variance:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="variance" id="variance" type="number" title="Enter a value between 0 and 300" min="0" max="300" step=any>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-8" for="tendency">Histogram tendency:</label>
+							<div class="col-sm-4">
+								<input class="form-control" name="tendency" id="tendency" type="number" title="Enter a value between -1 and 1" min="-1" max="1" step=any>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-sm-8" id="output" style="font-size:150%"></label>
+							<div class="col-sm-4">
+								<input class="form-control btn btn-info" id="submitbutton" type="submit" value="Get diagnostic result"></input>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	<br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-3">
+				<a href="../knn/normalPacient.docx"><input class="form-control btn btn-success" type="button" value="Download normal pacient sample"></input></a>
+			</diV>
+		<div>
+	</div>
+		<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-3">
+				<a href="../knn/suspectPacient.docx"><input class="form-control btn btn-warning" type="button" value="Download suspect pacient sample"></input></a>
+			</diV>
+		<div>
+	</div>
+		<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-3">
+				<a href="../knn/pathologicPacient.docx"><input class="form-control btn btn-danger" type="button" value="Download pathologic pacient sample"></input></a>
+			</diV>
+		<div>
+	</div>
+  </body>
+</html>
