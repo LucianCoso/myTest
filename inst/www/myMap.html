@@ -1,61 +1,77 @@
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-       <div id="regions_div" style="width: 900px; height: 500px;"></div>
-<script>
-  google.charts.load('current', {
-    'packages':['geochart'],
-    // Note: you will need to get a mapsApiKey for your project.
-    // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
-    'mapsApiKey': 'AIzaSyDaD40SdnzmSa_HQz1E4pk_Tlb36IAk6Xg'
-  });
-  google.charts.setOnLoadCallback(drawRegionsMap);
+<html>
+  <head>
+	<title>My map</title>
+    <style>
+      #map {
+	  position: absolute;
+	  width: 99%;
+	  height: 99%;
+	  background-color: black;
+      }
+    </style>
+  </head>
+  <body>
 
-  function drawRegionsMap() {
-    var data = google.visualization.arrayToDataTable([
-      ['Country', 'Year', 'Number'],
-      ['Romania', 1991, 1],
-      ['France', 2014, 2],
-      ['Greece', 2014, 3],
-      ['Austria', 2014, 4],
-      ['Slovakia', 2014, 5],
-      ['Hungary', 2014, 6],
-      ['Italy', 2015, 7],
-      ['Spain', 2015, 8],
-      ['Bulgaria', 2015, 9],
-      ['Moldova', 2015, 10],
-      ['CZ', 2015, 11],
-      ['Poland', 2016, 12],
-      ['Vatican', 11, 13],
-      ['Poland', 2016, 14],
-      ['Malta', 2016, 15],
-      ['GB', 2016, 16],
-      ['CY', 2017, 17],
-      ['Germany', 2017, 18],
-      ['Sweden', 2017, 18],
-      ['Portugal', 2017, 20],
-      ['Belgium', 2017, 21],
-      ['LK', 2018, 22],
-      ['AE', 2018, 23],
-      ['Israel', 2018, 24],
-      ['Norway', 2018, 25],
-      ['Georgia', 2018, 26],
-      ['CH', 2018, 27],
-      ['Iran', 2018, 28],
-      ['NL', 2018, 29],
-      ['Brazil', 2019, 30],
-      ['Argentina', 2019, 31],
-      ['Paraguay', 2019, 32],
-      ['Serbia', 2019, 33]
-    ]);
+  <div id="map"></div>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>  
+  <script>
+    google.charts.load('current', {
+      'packages':['geochart'],
+      // Note: you will need to get a mapsApiKey for your project.
+      // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+      'mapsApiKey': 'AIzaSyDaD40SdnzmSa_HQz1E4pk_Tlb36IAk6Xg'
+    });
+    google.charts.setOnLoadCallback(drawRegionsMap);
 
-    var options = {
-      colorAxis: {colors: ['#F42f00', 'black', '#242f3e']},
-      backgroundColor: '#81d4fa',
-      defaultColor: '#f5f5f5',
-      numberFormat:'####.'
-    };
+    function drawRegionsMap() {
+      var data = google.visualization.arrayToDataTable([
+        ['Country', 'Year', 'Number'],
+        ['Romania', 1991, 1],
+        ['France', 2014, 2],
+        ['Greece', 2014, 3],
+        ['Austria', 2014, 4],
+        ['Slovakia', 2014, 5],
+        ['Hungary', 2014, 6],
+        ['Italy', 2015, 7],
+        ['Spain', 2015, 8],
+        ['Bulgaria', 2015, 9],
+        ['Moldova', 2015, 10],
+        ['CZ', 2015, 11],
+        ['Poland', 2016, 12],
+        ['Vatican', 11, 13],
+        ['Poland', 2016, 14],
+        ['Malta', 2016, 15],
+        ['GB', 2016, 16],
+        ['CY', 2017, 17],
+        ['Germany', 2017, 18],
+        ['Sweden', 2017, 18],
+        ['Portugal', 2017, 20],
+        ['Belgium', 2017, 21],
+        ['LK', 2018, 22],
+        ['AE', 2018, 23],
+        ['Israel', 2018, 24],
+        ['Norway', 2018, 25],
+        ['Georgia', 2018, 26],
+        ['CH', 2018, 27],
+        ['Iran', 2018, 28],
+        ['NL', 2018, 29],
+        ['Brazil', 2019, 30],
+        ['Argentina', 2019, 31],
+        ['Paraguay', 2019, 32],
+        ['Serbia', 2019, 33]
+      ]);
 
-    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+      var options = {
+        colorAxis: {colors: ['#F42f00', 'black', '#242f3e']},
+        backgroundColor: '#81d4fa',
+        defaultColor: '#f5f5f5',
+        numberFormat:'####.'
+      };
 
-    chart.draw(data, options);
-  }
-</script>
+      var chart = new google.visualization.GeoChart(document.getElementById('map'));
+
+      chart.draw(data, options);
+    }
+  </script>
+  </body>
+</html>
